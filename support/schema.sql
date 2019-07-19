@@ -1,0 +1,115 @@
+start transaction;
+
+create table ITEM (
+    ID char(8),
+    Name varchar(128) not null,
+    Price int,
+    primary key (ID),
+    check (Price >= 0)
+);
+
+create table MENUITEM (
+    ItemId char(8),
+    Cuisine varchar(64),
+    Calories int,
+    Servings int,
+    primary key (ItemId),
+    foreign key (ItemId)
+        references ITEM (ID),
+    check (Calories >= 0),
+    check (Servings >= 0)
+);
+
+create table DECORITEM (
+    ItemId char(8),
+    Brand varchar(64),
+    Description varchar(4096),
+    Image blob,
+    primary key (ItemId),
+    foreign key (ItemId)
+        references ITEM (ID)
+);
+
+create table MUSICOPTION (
+    ItemId char(8),
+    Artist varchar(128),
+    Album varchar(64),
+    Genre varchar(64),
+    Length int,
+    primary key (ItemId),
+    foreign key (ItemId)
+        references ITEM (ID),
+    check (Length >= 0)
+);
+
+create table SUPPLIER (
+    ID char(3),
+    Name varchar(20) not null,
+    ContactName varchar(128) not null,
+    ContactPhone varchar(16) not null,
+    primary key (ID)
+);
+
+create table PROVIDE (
+    ItemId char(8),
+    SupplierId char(3),
+    Cost int not null,
+    primary key (ItemId , SupplierId),
+    foreign key (ItemId)
+        references ITEM (ID),
+    foreign key (SupplierId)
+        references SUPPLIER (ID)
+);
+
+create table CLIENT (
+    ID varchar(8),
+    FirstName varchar(64) not null,
+    LastName varchar(64) not null,
+    Email varchar(320) not null,
+    Phone varchar(16) not null,
+    primary key (ID)
+);
+
+create table VENUE (
+    ID char(3),
+    Address varchar(128),
+    Capacity int not null,
+    Price int not null,
+    primary key (ID),
+    check (Capacity >= 0),
+    check (Price >= 0)
+);
+
+create table EVENT (
+    ID char(8),
+    Topic varchar(512) not null,
+    Type varchar(32) not null,
+    Description varchar(4096),
+    Budget int,
+    NumGuests int,
+    DesiredDate date,
+    Client varchar(8) not null,
+    Location char(8),
+    Date date,
+    primary key (ID),
+    foreign key (Client)
+        references CLIENT (ID),
+    foreign key (Location)
+        references VENUE (ID),
+    check (Budget >= 0),
+    check (NumGuests >= 0)
+);
+
+create table USES (
+    ItemId char(8),
+    EventId varchar(8),
+    Quantity int not null,
+    primary key (ItemId , EventId),
+    foreign key (ItemId)
+        references ITEM (ID),
+    foreign key (EventId)
+        references EVENT (ID),
+    check (Quantity >= 0)
+);
+
+commit;

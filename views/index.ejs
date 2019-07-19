@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome. Try This!</p>
+    <form action="/db/event" method='post'>
+      Topic: <input type="text" name="Topic">
+      <br>
+      Type: <input type="text" name="Type">
+      <br>
+      Client: <input type="text" name="Client">
+      <br>
+      Location: <input type="text" name="Location">
+      <br><br>
+      <input type="submit" value="Submit">
+    </form> 
+  </body>
+</html>
