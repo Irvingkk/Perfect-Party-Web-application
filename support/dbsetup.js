@@ -1,53 +1,85 @@
 const fs = require('fs');
 const path = require('path');
+const readline = require('readline');
 const mysql = require('mysql');
-
 const config = require('./dbconn.json');
 
-const db = mysql.createConnection({
-    host: config.host,
-    port: config.port,
-    user: 'root',
-    password: '',  /* fill root password here */
-    multipleStatements: true,
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
 });
 
-function callback(err) {
-    if (err) {
-        if (err.sql) {
-            console.error(err.sql.substring(err.sql.indexOf('\n')));
-            console.error(err.sqlState);
-            console.error(err.sqlMessage);
-        } else {
-            console.error(err);
-        }
-        db.end();
-        process.exit(1);
-    }
+let db = mysql.createConnection({});
+
+function connect() { return new Promise((resolve, reject) => {
+  db.connect((err) => {
+    if (err) reject(err);
+    else resolve();
+  })
+})}
+  
+function execute(sql, values) { return new Promise((resolve, reject) => {
+  db.query(sql, values, (err) => {
+    if (err) reject(err);
+    else resolve();
+  })
+})}
+
+function changeUser(user) { return new Promise((resolve, reject) => {
+  db.changeUser(user, (err) => {
+      if (err) reject(err);
+      else resolve();
+    });
+})}
+
+function executeFile(file) {
+  return (new Promise((resolve, reject) => {
+    fs.readFile(path.join(__dirname, file), (err, data) => {
+      if (err) reject(err);
+      else resolve(data.toString());
+    });
+  })).then(execute, (_)=>_);
 }
 
-db.connect(callback);
+function readPassword() { return new Promise((resolve, reject) => {
+  let _ =  rl._writeToOutput;
 
-db.query(
-    "create database ??",
-    [config.database], callback);
+  rl.question('Password: ', function(password) {
+    rl._writeToOutput = _;
+    resolve(password);
+  })
 
-db.query(
-    "grant all privileges on ??.* to ?@'%' identified by ?",
-    [config.database, config.user, config.password], callback
-);
+  rl._writeToOutput =  function (stringToWrite) {
+    rl.output.write('*');
+  }
+})}
 
-db.query(
-    "grant select on performance_schema.* to ?@'%'",
-    [config.user], callback
-);
+function readUsername() { return new Promise((resolve, reject) => {
+  rl.question('Username: ', function(user) {
+    resolve(user);
+  })
+})}
 
-try { 
-    schema = fs.readFileSync(path.join(__dirname, 'schema.sql'));
-    db.changeUser(config, callback);
-    db.query(schema.toString(), callback);
-} catch (err) {
-    callback(err);
-}
-
-db.end();
+(async function (){
+  try {
+    let user = await readUsername();
+    let password = await readPassword();
+    db = mysql.createConnection({
+      host: config.host,
+      port: config.port,
+      user, password,
+      multipleStatements: true,
+    })
+    await connect();
+    await execute("create database ??", [config.database]);
+    await execute("grant all privileges on ??.* to ?@'%' identified by ?", [config.database, config.user, config.password]);
+    await execute("grant select on performance_schema.* to ?@'%'", [config.user]);
+    await changeUser(config);
+    await executeFile('schema.sql');
+    await executeFile('sample.sql');
+  } catch(err) {
+    console.error(err);
+  }
+  db.end();
+  process.exit(0);
+})();

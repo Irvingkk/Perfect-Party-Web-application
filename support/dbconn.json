@@ -1,5 +1,6 @@
 {
-    "host": "192.168.173.186",
+    "host": "192.168.173.190",
+    "port": 3306,
     "user": "app",
     "password": "secret",
     "database": "perfect_party"

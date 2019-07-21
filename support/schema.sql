@@ -81,8 +81,8 @@ create table VENUE (
 );
 
 create table EVENT (
-    ID char(8),
-    Topic varchar(512) not null,
+    ID int AUTO_INCREMENT,
+    Subject varchar(512) not null,
     Type varchar(32) not null,
     Description varchar(4096),
     Budget int,
@@ -102,7 +102,7 @@ create table EVENT (
 
 create table USES (
     ItemId char(8),
-    EventId varchar(8),
+    EventId int,
     Quantity int not null,
     primary key (ItemId , EventId),
     foreign key (ItemId)

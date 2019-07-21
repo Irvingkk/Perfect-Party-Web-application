@@ -1,0 +1,17 @@
+<%- include('_head.ejs', {title: 'Table'}) %>
+<table style="width:100%" border="1">
+  <tr>
+  <% columns.forEach((c)=>{ %>
+    <th><%= c %></th>
+  <% }) %>
+  </tr>
+
+  <% rows.forEach((r)=>{ %>
+  <tr>
+    <% columns.forEach((c)=>{ %>
+    <td><%= r[c] %></td>
+    <% }) %>
+  </tr>
+  <% }) %>
+</table>
+<%- include _tail.ejs %>

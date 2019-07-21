@@ -1,6 +1,3 @@
-const express = require('express');
-const router = express.Router();
-
 const mysql = require('mysql');
 const conn = require('./support/dbconn.json');
 
@@ -37,48 +34,56 @@ async function single_query(sql, values) {
   }
 }
 
-router.post('/event', function(req, res, next) {
+async function select_event(req_body, columns) {
   /**
-   * body should look like:
-   * { Topic: xxx, Type: xxx, Client: xxx, Location:xxx }
+   * req_body should look like:
+   * { Subject: xxx, Type: xxx, Client: xxx, Location:xxx }
+   * colums should look like:
+   * [ 'Subject', 'ID', ...]
    */
-  let {Topic, Type, Client, Location} = req.body;
-
-  let sql = 'select * from EVENT where';
   let conditions = []
   let values = []
 
-  for (element of ['Type', 'Client', 'Location']) {
-    val = req.body[element];
-    if (req.body[element]) {
-      conditions.push(` ${element} = ?`);
-      values.push(val);
+  if (req_body) {
+    for (element of ['Type', 'Client', 'Location']) {
+      let val = req_body[element];
+      if (req_body[element]) {
+        conditions.push(` ${element} = ?`);
+        values.push(val);
+      }
+    }
+
+    for (element of ['Subject']) {
+      let val = req_body[element];
+      if (req_body[element]) {
+        conditions.push(` ${element} like ?`);
+        values.push(`%${val}%`);
+      }
     }
   }
 
-  for (element of ['Topic']) {
-    val = req.body[element];
-    if (req.body[element]) {
-      conditions.push(` ${element} like ?`);
-      values.push(`%${val}%`);
-    }
-  }
+  let where_clause = conditions.length > 0 ? `where ${conditions.join(' and')}` : '';
+  let column_clause = columns ? columns.join(',') : '*';
 
-  single_query(
-    `select * from EVENT ${conditions.length>0? 'where' : ''} ${conditions.join(' and')}`, values
-  ).then(
-    /* on success */
-    ({result, fields}) => {
-      res.status(200);
-      res.send(JSON.stringify(result));
-    },
-    /* on failure */
-    (err) => {
-      console.error(err);
-      res.status(500);
-      res.send('Internal Error');
-    }
-  );
-});
+  let {result, fields} = await single_query(`select ${column_clause} from EVENT ${where_clause}`, values);
+  return result;
+}
 
-module.exports = router;
+async function list_venue() {
+  let {result, fields} = await single_query(`select ID,Address from VENUE`);
+  return result;
+}
+
+async function insert_event(req_body) {
+  /**
+   * req_body should look like:
+   * {
+   *   Subject: xxx, Budget: xxx, NumGuests: xxx,
+   *   DesiredDate:xxx, Description:xxx, Location:xxx
+   * }
+   */
+  let {result, fields} = await single_query('insert into EVENT set ?', req_body);
+  return result;
+}
+
+module.exports = {select_event, insert_event, list_venue};

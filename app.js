@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 
 const pageRouter = require('./page');
-const dbRouter = require('./db');
 
 const app = express();
 
@@ -15,12 +14,12 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', pageRouter);
-app.use('/db', dbRouter);
 
 // catch 404
 app.use(function(req, res, next) { 
+  let error = new Error("Page Not Found");
   res.status(404);
-  res.render('error');
+  res.render('error', {error});
 })
 
 app.listen(3000, () => console.log(`Example app listening on port ${3000}!`))
