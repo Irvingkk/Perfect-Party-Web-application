@@ -1,26 +1,114 @@
-<%- include('_head.ejs', {title: 'Create Event'}) %>
+<%- include('_head.ejs', {title: 'Event Booking'}) %>
 <form method='post'>
-  Subject: <input type="text" name="Subject">
+  <div class="w3-container light-border" id="step1">
+    <h2>Basic Info</h2>
+    <p>Select a Type:   <input type="radio" name="event_type" value="wedding">Wedding
+      <input type="radio" name="event_type" value="birthday">Birthday
+      <input type="radio" name="event_type" value="party">Party
+      <input type="radio" name="event_type" value="corporate event">Corporate Event
+    </p>
+    <p>Subject:<input class="align-right" type="text" name="Subject"></p>
+    <p>Client: <input class="align-right" type="text" name="Budget" min="0"></p>
+    <p>Budget: <input class="align-right" type="number" name="NumGuests" min="1"></p>
+    <p>Invitees: <input class="align-right" type="text" name="Type"></p>
+    <p>Date:  From <input type="date" name="fromDesiredDate">  To <input type="date" name="toDesiredDate"></p>
+    <p>Description:</p>
+    <textarea rows="4" cols="50" name="Description"></textarea>
+
+    <p style="width:570px">
+      <input type="button" value="Cancel">
+      <input style="float:right" type="button" value="Next"></p>
+  </div>
+
+  <div class="w3-container light-border" id="step2">
+    <script>
+      function fillLocation() {
+        let selectElement = document.querySelector('select[name=Location]');
+        let optionElement = selectElement.options[selectElement.selectedIndex];
+        document.querySelector('#location-capacity').innerHTML = optionElement.getAttribute('data-capacity');
+        document.querySelector('#location-price').innerHTML = optionElement.getAttribute('data-price');
+      }
+    </script>
+    <h2>Venue</h2>
+    <p>Select Venue:
+      <select name="Location" onchange="fillLocation()" onload="fillLocation()">
+          <% venues.forEach( (v) => { %>
+            <option value=<%- v.ID %> data-capacity=<%- v.Capacity %> data-price=<%- v.Price %>>
+              <%= v.Address %> </option>
+          <% }) %>
+      </select>
+    </p>
+    <p>Capacity: <span id="location-capacity"></span></p>
+    <p>Price: <span id="location-price"></span></p>
+    <p style="width:570px">
+      <input type="button" value="Cancel">
+      <input style="float:right" type="button" value="Next">
+    </p>
+  </div>
+
   <br>
-  Type: <input type="text" name="Type">
-  <br>
-  Client: <input type="text" name="Client">
-  <br>
-  Budget: <input type="number" name="Budget" min="0">
-  <br>
-  Invitees: <input type="number" name="NumGuests" min="1">
-  <br>
-  Date: <input type="date" name="DesiredDate">
-  <br>
-  Description: <textarea rows="4" cols="50" name="Description"></textarea>
-  <br>
-  Location:
-  <select name="Location">
-    <% venues.forEach( (v) => { %>
-      <option value=<%- v.ID %>> <%= v.Address %> </option>
-    <% } ) %>
-  </select>
-  <br>
-  <input type="submit" value="Submit">
+  <div class="w3-container light-border" id="step3">
+    <h2>Custom your Event</h2>
+    <div class="w3-container light-border" id="menu" style="width:570px">
+      <h3>Menu Item</h3>
+      <p>Supplier</p>
+      <p>Type</p>
+    </div>
+    <div class="w3-container light-border" id="decor" style="width:570px">
+      <h3>Decor</h3>
+      <p>Supplier</p>
+      <p>Type</p>
+    </div>
+    <div class="w3-container light-border" id="musicOption" style="width:570px">
+      <h3>Music/Entertainment Options</h3>
+      <p>Supplier</p>
+      <p>Type</p>
+    </div>
+    <p style="width:570px">
+      <input type="button" value="Cancel">
+      <input style="float:right" type="button" value="Next"></p>
+  </div>
 </form> 
 <%- include _tail.ejs %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

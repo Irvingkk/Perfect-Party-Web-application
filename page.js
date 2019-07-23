@@ -20,6 +20,13 @@ router.get('/create_event', function(req, res, next) {
   )
 });
 
+router.get('/add_client', function(req, res, next){
+    res.render('create_client');
+});
+router.get('/add_supplier', function(req, res, next){
+    res.render('create_supplier');
+});
+
 router.post('/create_event', function(req, res, next) {
   db.insert_event(req.body).then(
     /* on success, render with venue list */

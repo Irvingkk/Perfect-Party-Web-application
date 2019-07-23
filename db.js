@@ -70,7 +70,7 @@ async function select_event(req_body, columns) {
 }
 
 async function list_venue() {
-  let {result, fields} = await single_query(`select ID,Address from VENUE`);
+  let {result, fields} = await single_query(`select ID,Address,Capacity,Price from VENUE`);
   return result;
 }
 

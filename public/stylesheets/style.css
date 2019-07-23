@@ -3,6 +3,31 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+div #item {
+  border: 2px solid cornflowerblue;
+  margin: 8px;
+  padding-left: 5px;
+}
+th {
+  text-align: left;
+}
+.w3-container{
+  padding: 8px;
+  margin: 5px;
+  width: 600px;
+}
+
+.align-left{
+  text-align:left;
+}
+.align-right{
+  text-align:right;
+}
+
+.light-border {
+  border: 2px solid cornflowerblue;
+}
+
 a {
   color: #00B7FF;
 }
