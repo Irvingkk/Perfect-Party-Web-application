@@ -86,4 +86,15 @@ async function insert_event(req_body) {
   return result;
 }
 
-module.exports = {select_event, insert_event, list_venue};
+async function insert_client(req_body) {
+  /**
+   * req_body should look like:
+   * {
+   *   FirstName: xxx, LastName: xxx, Email: xxx,
+   *   Phone:xxx, BillingMethod:xxx
+   * }
+   */
+  let {result, fields} = await single_query('insert into CLIENT set ?', req_body);
+  return result;
+}
+module.exports = {select_event, insert_event, list_venue, insert_client};

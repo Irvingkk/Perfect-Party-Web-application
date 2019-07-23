@@ -43,11 +43,10 @@ create table MUSICOPTION (
 );
 
 create table SUPPLIER (
-    ID char(3),
     Name varchar(20) not null,
     ContactName varchar(128) not null,
     ContactPhone varchar(16) not null,
-    primary key (ID)
+    primary key (Name)
 );
 
 create table PROVIDE (
@@ -58,7 +57,7 @@ create table PROVIDE (
     foreign key (ItemId)
         references ITEM (ID),
     foreign key (SupplierId)
-        references SUPPLIER (ID)
+        references SUPPLIER (Name)
 );
 
 create table CLIENT (
@@ -67,6 +66,7 @@ create table CLIENT (
     LastName varchar(64) not null,
     Email varchar(320) not null,
     Phone varchar(16) not null,
+    BillingMethod varchar(6) not null,
     primary key (ID)
 );
 

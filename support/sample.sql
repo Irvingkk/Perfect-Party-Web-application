@@ -1,6 +1,6 @@
 insert into
-    CLIENT (ID, FirstName, LastName, Email, Phone)
-    values ('zqing', 'Ziqi', 'Qing', 'zqing@uwaterloo.ca','+15198884567');
+    CLIENT (ID, FirstName, LastName, Email, Phone, BillingMethod)
+    values ('zqing', 'Ziqi', 'Qing', 'zqing@uwaterloo.ca','+15198884567', 'Cash');
 
 insert into
     EVENT (Subject, Type, Client, Budget, NumGuests)

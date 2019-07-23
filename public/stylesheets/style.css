@@ -17,6 +17,15 @@ th {
   width: 600px;
 }
 
+#step1{
+  display: inherit;
+}
+#step2{
+  display:none;
+}
+#step3{
+  display: none;
+}
 .align-left{
   text-align:left;
 }

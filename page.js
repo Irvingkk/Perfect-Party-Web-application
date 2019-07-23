@@ -76,4 +76,21 @@ router.post('/search_event', function(req, res, next) {
   );
 });
 
+router.post('/add_client', function(req, res, next) {
+    db.insert_client(req.body).then(
+        /* on success, render with venue list */
+        (result) => {
+            console.log(result);
+            res.status(200);
+            res.send(`Successfully create client ID ${result.insertId}`);
+        },
+        /* on failure, render with empty list */
+        (error) => {
+            console.error(error);
+            res.status(400);
+            res.send('Cannot create client.');
+        }
+    )
+});
+
 module.exports = router;
