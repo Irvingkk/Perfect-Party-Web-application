@@ -3,16 +3,16 @@
   <div class="w3-container light-border" id="step1" >
     <h2>Basic Info</h2>
     <p>Select a Type:
-      <input type="radio" name="event_type" value="wedding">Wedding
-      <input type="radio" name="event_type" value="birthday">Birthday
-      <input type="radio" name="event_type" value="party">Party
-      <input type="radio" name="event_type" value="corporate event">Corporate Event
+      <input type="radio" name="Type" value="wedding">Wedding
+      <input type="radio" name="Type" value="birthday">Birthday
+      <input type="radio" name="Type" value="party">Party
+      <input type="radio" name="Type" value="corporate event">Corporate Event
     </p>
     <p>Subject:<input class="align-right" type="text" name="Subject"></p>
-    <p>Client: <input class="align-right" type="text" name="Budget" min="0"></p>
-    <p>Budget: <input class="align-right" type="number" name="NumGuests" min="1"></p>
-    <p>Invitees: <input class="align-right" type="text" name="Type"></p>
-    <p>Date:  From <input type="date" name="fromDesiredDate">  To <input type="date" name="toDesiredDate"></p>
+    <p>Budget:  <input class="align-right" type="text" name="Budget" min="0"></p>
+    <p>Invitees:<input class="align-right" type="number" name="NumGuests" min="1"></p>
+    <p>Client: <input class="align-right" type="text" name="Client"></p>
+    <p>Date:  <input type="date" name="DesiredDate"> </p>
     <p>Description:</p>
     <textarea rows="4" cols="50" name="Description"></textarea>
 
@@ -37,40 +37,32 @@
     <p>Price: <span id="location-price"></span></p>
     <p style="width:570px">
       <input type="button" value="Cancel" onclick="cancel_clicked()">
-      <input style="float:right" type="button" value="Next" onclick="next_clicked()">
+      <input style="float:right" type="submit" value="Done" onclick="done_clicked()">
     </p>
-    <script>
-        function fillLocation() {
-          let selectElement = document.querySelector('select[name=Location]');
-          let optionElement = selectElement.options[selectElement.selectedIndex];
-          document.querySelector('#location-capacity').innerHTML = optionElement.getAttribute('data-capacity');
-          document.querySelector('#location-price').innerHTML = optionElement.getAttribute('data-price');
-        }
-    </script>
   </div>
 
-  <div class="w3-container light-border" id="step3">
-    <h2>Custom your Event</h2>
-    <div class="w3-container light-border" id="menu" style="width:570px">
-      <h3>Menu Item</h3>
-      <p>Supplier</p>
-      <p>Type</p>
-    </div>
-    <div class="w3-container light-border" id="decor" style="width:570px">
-      <h3>Decor</h3>
-      <p>Supplier</p>
-      <p>Type</p>
-    </div>
-    <div class="w3-container light-border" id="musicOption" style="width:570px">
-      <h3>Music/Entertainment Options</h3>
-      <p>Supplier</p>
-      <p>Type</p>
-    </div>
-    <p style="width:570px">
-      <input type="button" value="Cancel" onclick="cancel_clicked()">
-      <input style="float:right" type="button" value="Done" onclick="done_clicked()">
-    </p>
-  </div>
+<!--  <div class="w3-container light-border" id="step3">-->
+<!--    <h2>Custom your Event</h2>-->
+<!--    <div class="w3-container light-border" id="menu" style="width:570px">-->
+<!--      <h3>Menu Item</h3>-->
+<!--      <p>Supplier</p>-->
+<!--      <p>Type</p>-->
+<!--    </div>-->
+<!--    <div class="w3-container light-border" id="decor" style="width:570px">-->
+<!--      <h3>Decor</h3>-->
+<!--      <p>Supplier</p>-->
+<!--      <p>Type</p>-->
+<!--    </div>-->
+<!--    <div class="w3-container light-border" id="musicOption" style="width:570px">-->
+<!--      <h3>Music/Entertainment Options</h3>-->
+<!--      <p>Supplier</p>-->
+<!--      <p>Type</p>-->
+<!--    </div>-->
+<!--    <p style="width:570px">-->
+<!--      <input type="button" value="Cancel" onclick="cancel_clicked()">-->
+<!--      <input style="float:right" type="button" value="Done" onclick="done_clicked()">-->
+<!--    </p>-->
+<!--  </div>-->
 </form>
 
 <script>

@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/create_client', function(req, res, next){
-  res.render('create_client');
+  res.render('create_client',{response: ''});
 });
 
 router.post('/create_client', function(req, res, next){
@@ -17,13 +17,13 @@ router.post('/create_client', function(req, res, next){
     (result) => {
       console.log(result);
       res.status(200);
-      res.send(`Successfully create client ID ${result.insertId}`);
+      res.render('alert', {message: `Successfully create client ID ${result.insertId}`});
     },
     /* on failure, render with empty list */
     (error) => {
       console.error(error);
       res.status(400);
-      res.send('Cannot create client.');
+      res.render('alert', {message: `Cannot create client.`});
     }
   )
 });
@@ -44,7 +44,7 @@ router.get('/list_client', function(req, res, next){
     (error) => {
       console.error(error);
       res.status(500);
-      res.send('Internal Error');
+      res.render('alert', {message: 'Internal Error'})
     }
   );
 });
@@ -74,13 +74,14 @@ router.post('/create_event', function(req, res, next) {
     (result) => {
       console.log(result);
       res.status(200);
-      res.send(`Successfully create event ID ${result.insertId}`);
+
+      res.render('alert',{message: `Successfully create event ID ${result.insertId}`});
     },
     /* on failure, render with empty list */
     (error) => {
       console.error(error);
       res.status(400);
-      res.send('Cannot create event.');
+      res.render('alert',{message: 'Cannot create event.'});
     }
   )
 });
@@ -116,23 +117,6 @@ router.post('/search_event', function(req, res, next) {
       res.send('Internal Error');
     }
   );
-});
-
-router.post('/add_client', function(req, res, next) {
-    db.insert_client(req.body).then(
-        /* on success, render with venue list */
-        (result) => {
-            console.log(result);
-            res.status(200);
-            res.send(`Successfully create client ID ${result.insertId}`);
-        },
-        /* on failure, render with empty list */
-        (error) => {
-            console.error(error);
-            res.status(400);
-            res.send('Cannot create client.');
-        }
-    )
 });
 
 module.exports = router;
