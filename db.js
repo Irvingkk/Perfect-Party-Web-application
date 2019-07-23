@@ -86,4 +86,70 @@ async function insert_event(req_body) {
   return result;
 }
 
-module.exports = {select_event, insert_event, list_venue};
+async function check_client_id(db, id) {
+  let {result} = await query(db, 'select ID from CLIENT where ID = ?', [id]);
+  return result.length == 0;
+}
+
+async function generate_client_id(db, req_body) {
+
+  if (req_body.Email) {
+    let pattern = /^([a-zA-Z_][a-zA-Z0-9_.-]*)@.*$/;
+    let match = `${req_body.Email}`.match(pattern);
+    if (match) {
+      let id = match[1].substr(0,8);
+      if (await check_client_id(db, id)) {
+        return id;
+      }
+    }
+  }
+
+  let numbers = [];
+  for (let i=0; i < 10; i++) {
+    numbers.push(Math.round(Math.random()*256));
+  }
+
+  if (req_body.FirstName && req_body.LastName) {
+    let first = `${req_body.FirstName}`;
+    let last = `${req_body.LastName}`;
+
+    for (let m of ['','.','-','_'].concat(numbers)) {
+      for (let i = 1; i <= first.length; i++) {
+        let id = `${first.substr(0,i)}${m}${last}`;
+        if (id.length > 8) break;
+        if (await check_client_id(db, id)) return id;
+      }
+    }
+  }
+
+  if (req_body.LastName) {
+    let last = `${req_body.LastName}`;
+    for (let m of numbers) {
+      let id = `${last}${m}`.substr(0,8);
+      if (await check_client_id(db, id)) return id;
+    }
+  }
+
+  throw new Error('ID generation failed.');
+}
+
+async function insert_client(req_body) {
+  let db = await connect();
+
+  let client_id = await generate_client_id(db, req_body);
+
+  let client = {...req_body, ID: client_id};
+
+  let {result} = await query(db, 'insert into CLIENT set ?', [client]);
+
+  result.insertId = client_id;
+
+  return result;
+}
+
+async function list_client() {
+  let {result, fields} = await single_query(`select * from CLIENT`);
+  return result;
+}
+
+module.exports = {list_client, insert_client, select_event, insert_event, list_venue};
