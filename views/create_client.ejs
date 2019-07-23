@@ -1,18 +1,18 @@
 <%- include('_head.ejs', {title: 'Create Client'}) %>
-<form method='post'>
-    First Name:
-    <br>
-    Last Name:
-    <br>
-    Email:
-    <br>
-    Billing method:
-    <br>
-    <input type="radio" name="billing" value="debit"> Debit
-    <input type="radio" name="billing" value="cash"> Cash
-    <input type="radio" name="billing" value="credit"> Credit
-    <br>
-    <input type="button" value="Cancel">
-    <input type="button" value="Done">
+<form class="w3-container light-border" method='post'>
+    <div style="width:260px">
+        <p>First Name: <input style="float:right" type="text" name="firstName"></p>
+        <p>Last Name: <input style="float:right" type="text" name="lastName"></p>
+        <p>Email: <input style="float:right" type="text" name="email"></p>
+    </div>
+    <p>Billing method: <br>
+        <input type="radio" name="billing" value="debit"> Debit
+        <input type="radio" name="billing" value="cash"> Cash
+        <input type="radio" name="billing" value="credit"> Credit
+    </p>
+    <div class="w3-container" style="width:470px">
+        <input type="button" value="Cancel">
+        <input style="float:right" type="button" value="Done">
+    </div>
 </form>
 <%- include _tail.ejs%>
