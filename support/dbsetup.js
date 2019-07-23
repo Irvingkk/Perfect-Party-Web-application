@@ -67,12 +67,14 @@ function readUsername() { return new Promise((resolve, reject) => {
     db = mysql.createConnection({
       host: config.host,
       port: config.port,
+      socketPath: config.socketPath,
       user, password,
       multipleStatements: true,
     })
     await connect();
     await execute("create database ??", [config.database]);
-    await execute("grant all privileges on ??.* to ?@'%' identified by ?", [config.database, config.user, config.password]);
+    await execute("create user ?@'%' identified by ?", [config.user, config.password]);
+    await execute("grant all privileges on ??.* to ?@'%'", [config.database, config.user]);
     await execute("grant select on performance_schema.* to ?@'%'", [config.user]);
     await changeUser(config);
     await executeFile('schema.sql');
