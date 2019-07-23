@@ -2,7 +2,8 @@
 <form method='post'>
   <div class="w3-container light-border" id="step1" >
     <h2>Basic Info</h2>
-    <p>Select a Type:   <input type="radio" name="event_type" value="wedding">Wedding
+    <p>Select a Type:
+      <input type="radio" name="event_type" value="wedding">Wedding
       <input type="radio" name="event_type" value="birthday">Birthday
       <input type="radio" name="event_type" value="party">Party
       <input type="radio" name="event_type" value="corporate event">Corporate Event
@@ -17,7 +18,8 @@
 
     <p style="width:570px">
       <input type="button" value="Cancel" onclick="cancel_clicked()">
-      <input style="float:right" type="button" value="Next" onclick="next_clicked()"></p>
+      <input style="float:right" type="button" value="Next" onclick="next_clicked()">
+    </p>
   </div>
 
   <div class="w3-container light-border" id="step2">
@@ -26,7 +28,8 @@
       <select name="Location" onchange="fillLocation()" onload="fillLocation()">
           <% venues.forEach( (v) => { %>
             <option value=<%- v.ID %> data-capacity=<%- v.Capacity %> data-price=<%- v.Price %>>
-              <%= v.Address %> </option>
+              <%= v.Address %>
+            </option>
           <% }) %>
       </select>
     </p>
@@ -36,9 +39,16 @@
       <input type="button" value="Cancel" onclick="cancel_clicked()">
       <input style="float:right" type="button" value="Next" onclick="next_clicked()">
     </p>
+    <script>
+        function fillLocation() {
+          let selectElement = document.querySelector('select[name=Location]');
+          let optionElement = selectElement.options[selectElement.selectedIndex];
+          document.querySelector('#location-capacity').innerHTML = optionElement.getAttribute('data-capacity');
+          document.querySelector('#location-price').innerHTML = optionElement.getAttribute('data-price');
+        }
+    </script>
   </div>
 
-  <br>
   <div class="w3-container light-border" id="step3">
     <h2>Custom your Event</h2>
     <div class="w3-container light-border" id="menu" style="width:570px">
@@ -58,7 +68,8 @@
     </div>
     <p style="width:570px">
       <input type="button" value="Cancel" onclick="cancel_clicked()">
-      <input style="float:right" type="button" value="Done" onclick="done_clicked()"></p>
+      <input style="float:right" type="button" value="Done" onclick="done_clicked()">
+    </p>
   </div>
 </form>
 

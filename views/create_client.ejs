@@ -1,9 +1,10 @@
 <%- include('_head.ejs', {title: 'Create Client'}) %>
-<form class="w3-container light-border" method='post'>
+<form class="w3-container light-border" method="post">
     <div style="width:260px">
-        <p>First Name: <input style="float:right" type="text" name="firstName"></p>
-        <p>Last Name: <input style="float:right" type="text" name="lastName"></p>
-        <p>Email: <input style="float:right" type="text" name="email"></p>
+        <p>First Name: <input style="float:right" type="text" name="FirstName"></p>
+        <p>Last Name: <input style="float:right" type="text" name="LastName"></p>
+        <p>Email: <input style="float:right" type="text" name="Email"></p>
+        <p>Phone: <input style="float:right" type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"></p>
     </div>
     <p>Billing method: <br>
         <input type="radio" name="BillingMethod" value="debit"> Debit

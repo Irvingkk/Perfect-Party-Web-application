@@ -6,6 +6,54 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Perfect Party' });
 });
 
+
+router.get('/create_client', function(req, res, next){
+  res.render('create_client');
+});
+
+router.post('/create_client', function(req, res, next){
+  db.insert_client(req.body).then(
+    /* on success, render with venue list */
+    (result) => {
+      console.log(result);
+      res.status(200);
+      res.send(`Successfully create client ID ${result.insertId}`);
+    },
+    /* on failure, render with empty list */
+    (error) => {
+      console.error(error);
+      res.status(400);
+      res.send('Cannot create client.');
+    }
+  )
+});
+
+router.get('/list_client', function(req, res, next){
+  db.list_client().then(
+    /* on success */
+    (result) => {
+      res.status(200);
+      res.render('table', 
+        {
+          rows: result,
+          columns: ['ID', 'FirstName', 'LastName', 'Email', 'Phone'],
+        }
+      );
+    },
+    /* on failure */
+    (error) => {
+      console.error(error);
+      res.status(500);
+      res.send('Internal Error');
+    }
+  );
+});
+
+router.get('/add_supplier', function(req, res, next){
+    res.render('create_supplier');
+});
+
+
 router.get('/create_event', function(req, res, next) {
   db.list_venue().then(
     /* on success, render with venue list */
@@ -18,13 +66,6 @@ router.get('/create_event', function(req, res, next) {
       res.render('create_event', {venues: []});
     }
   )
-});
-
-router.get('/add_client', function(req, res, next){
-    res.render('create_client');
-});
-router.get('/add_supplier', function(req, res, next){
-    res.render('create_supplier');
 });
 
 router.post('/create_event', function(req, res, next) {
@@ -43,6 +84,7 @@ router.post('/create_event', function(req, res, next) {
     }
   )
 });
+
 
 router.get('/search_event', function(req, res, next) {
   res.render('search_event');
