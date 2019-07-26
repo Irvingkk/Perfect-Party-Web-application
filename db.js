@@ -152,4 +152,30 @@ async function list_client() {
   return result;
 }
 
+
+
 module.exports = {list_client, insert_client, select_event, insert_event, list_venue};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

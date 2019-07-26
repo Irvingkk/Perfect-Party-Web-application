@@ -8,15 +8,19 @@ div #item {
   margin: 8px;
   padding-left: 5px;
 }
-th {
-  text-align: left;
-}
+/*td {*/
+/*  text-align: left;*/
+/*}*/
 .w3-container{
   padding: 8px;
   margin: 5px;
   width: 600px;
 }
 
+table, th, td{
+  border: 1px solid black;
+  border-collapse: collapse;
+}
 #step1{
   display: inherit;
 }

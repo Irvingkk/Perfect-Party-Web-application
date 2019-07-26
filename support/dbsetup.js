@@ -74,7 +74,6 @@ function readUsername() { return new Promise((resolve, reject) => {
     await connect();
     await execute("drop database if exists ??", [config.database]);
     await execute("create database ??", [config.database]);
-    await execute("create user ?@'%' identified by ?", [config.user, config.password]);
     await execute("grant all privileges on ??.* to ?@'%'", [config.database, config.user]);
     await execute("grant select on performance_schema.* to ?@'%'", [config.user]);
     await changeUser(config);
