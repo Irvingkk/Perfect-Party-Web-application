@@ -1,5 +1,5 @@
 {
-    "host": "192.168.173.190",
+    "host": "",
     "port": 3306,
     "user": "app",
     "password": "secret",

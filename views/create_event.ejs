@@ -1,26 +1,16 @@
 <%- include('_head.ejs', {title: 'Create Event'}) %>
-<form method='post'>
-  Subject: <input type="text" name="Subject">
-  <br>
-  Type: <input type="text" name="Type">
-  <br>
-  Client: <input type="text" name="Client">
-  <br>
-  Budget: <input type="number" name="Budget" min="0">
-  <br>
-  Invitees: <input type="number" name="NumGuests" min="1">
-  <br>
-  Date: <input type="date" name="DesiredDate">
-  <br>
-  Description: <textarea rows="4" cols="50" name="Description"></textarea>
-  <br>
-  Location:
-  <select name="Location">
-    <% venues.forEach( (v) => { %>
-      <option value=<%- v.ID %>> <%= v.Address %> </option>
-    <% } ) %>
-  </select>
-  <br>
-  <input type="submit" value="Submit">
-</form> 
-<%- include _tail.ejs %>
+
+
+
+<form>
+  <fieldset>
+    <legend>Legend</legend>
+    <label>Label name</label>
+    <input type="text" placeholder="Type something¡­">
+    <span class="help-block">Example block-level help text here.</span>
+    <label class="checkbox">
+      <input type="checkbox"> Check me out
+    </label>
+    <button type="submit" class="btn">Submit</button>
+  </fieldset>
+</form>

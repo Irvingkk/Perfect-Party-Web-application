@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', pageRouter);
 
+
 // catch 404
 app.use(function(req, res, next) { 
   let error = new Error("Page Not Found");
