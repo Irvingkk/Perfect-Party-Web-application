@@ -20,7 +20,6 @@
             <table class="table table-hovered">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Contact Name</th>
                         <th scope="col">Phone</th>
@@ -30,11 +29,10 @@
                 <tbody>
                     <% Supplier.forEach((s) => { %>
                         <tr>
-                            <th scope="row"><%= s.ID %></th>
                             <td><%= s.Name %></td>
                             <td><%= s.ContactName %></td>
                             <td><%= s.ContactPhone %></td>
-							<td><a href="/edit_supplier/<%= s.ID %>" >edit</a> <a href="/delete_supplier/<%= s.ID %>" >delete</a></td>
+							<td><a href="/edit_supplier/<%= s.Name %>" >edit</a> <a href="/delete_supplier/<%= s.Name %>" >delete</a></td>
                         </tr>
                     <% }) %>
                 </tbody>

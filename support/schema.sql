@@ -15,7 +15,7 @@ create table MENUITEM (
     Servings int,
     primary key (ItemId),
     foreign key (ItemId)
-        references ITEM (ID),
+        references ITEM (ID) on update cascade  on delete cascade,
     check (Calories >= 0),
     check (Servings >= 0)
 );
@@ -27,7 +27,7 @@ create table DECORITEM (
     Image blob,
     primary key (ItemId),
     foreign key (ItemId)
-        references ITEM (ID)
+        references ITEM (ID) on update cascade  on delete cascade
 );
 
 create table MUSICOPTION (
@@ -38,27 +38,26 @@ create table MUSICOPTION (
     Length int,
     primary key (ItemId),
     foreign key (ItemId)
-        references ITEM (ID),
+        references ITEM (ID) on update cascade  on delete cascade,
     check (Length >= 0)
 );
 
 create table SUPPLIER (
-    ID char(3),
     Name varchar(20) not null,
     ContactName varchar(128) not null,
     ContactPhone varchar(16) not null,
-    primary key (ID)
+    primary key (Name)
 );
 
 create table PROVIDE (
-    ItemId char(8),
-    SupplierId char(3),
+    ItemId char(8) not null,
+    Supplier varchar(20) not null,
     Cost int not null,
-    primary key (ItemId , SupplierId),
+    primary key (ItemId , Supplier),
     foreign key (ItemId)
-        references ITEM (ID),
-    foreign key (SupplierId)
-        references SUPPLIER (ID)
+        references ITEM (ID) on update cascade  on delete cascade,
+    foreign key (Supplier)
+        references SUPPLIER (Name) on update cascade  on delete cascade
 );
 
 create table CLIENT (
@@ -67,6 +66,7 @@ create table CLIENT (
     LastName varchar(64) not null,
     Email varchar(320) not null,
     Phone varchar(16) not null,
+    BillingMethod varchar(6) not null,
     primary key (ID)
 );
 
@@ -93,22 +93,22 @@ create table EVENT (
     Date date,
     primary key (ID),
     foreign key (Client)
-        references CLIENT (ID),
+        references CLIENT (ID) on update cascade  on delete cascade,
     foreign key (Location)
-        references VENUE (ID),
+        references VENUE (ID) on update cascade  on delete set null,
     check (Budget >= 0),
     check (NumGuests >= 0)
 );
 
 create table USES (
-    ItemId char(8),
     EventId int,
+    ItemId char(8),
     Quantity int not null,
     primary key (ItemId , EventId),
     foreign key (ItemId)
-        references ITEM (ID),
+        references ITEM (ID) on update cascade  on delete cascade,
     foreign key (EventId)
-        references EVENT (ID),
+        references EVENT (ID) on update cascade  on delete cascade,
     check (Quantity >= 0)
 );
 

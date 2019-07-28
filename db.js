@@ -109,7 +109,7 @@ async function select_supplier(req_body, columns) {
 
 
 async function list_venue() {
-  let {result, fields} = await single_query(`select ID,Address from VENUE`);
+  let {result, fields} = await single_query(`select ID,Address,Capacity,Price from VENUE`);
   return result;
 }
 
@@ -127,7 +127,7 @@ async function insert_event(req_body) {
 
 async function query_supplier(id, req_body){
     db = await connect();
-    let {result} = await query(db, 'select * from SUPPLIER where ID = ?', [id]);
+    let {result} = await query(db, 'select * from SUPPLIER where Name = ?', [id]);
     return result;
 }
 async function insert_supplier(req_body) {
@@ -157,5 +157,142 @@ async function delete_supplier(id) {
 }
 
 
-module.exports = {update_supplier, select_event, select_supplier,insert_event,
-    insert_supplier,single_query,select_all_supplier, list_venue, query_supplier, delete_supplier};
+async function check_client_id(db, id) {
+  let {result} = await query(db, 'select ID from CLIENT where ID = ?', [id]);
+  return result.length == 0;
+}
+
+async function generate_client_id(db, req_body) {
+
+  if (req_body.Email) {
+    let pattern = /^([a-zA-Z_][a-zA-Z0-9_.-]*)@.*$/;
+    let match = `${req_body.Email}`.match(pattern);
+    if (match) {
+      let id = match[1].substr(0,8);
+      if (await check_client_id(db, id)) {
+        return id;
+      }
+    }
+  }
+
+  let numbers = [];
+  for (let i=0; i < 10; i++) {
+    numbers.push(Math.round(Math.random()*256));
+  }
+
+  if (req_body.FirstName && req_body.LastName) {
+    let first = `${req_body.FirstName}`;
+    let last = `${req_body.LastName}`;
+
+    for (let m of ['','.','-','_'].concat(numbers)) {
+      for (let i = 1; i <= first.length; i++) {
+        let id = `${first.substr(0,i)}${m}${last}`;
+        if (id.length > 8) break;
+        if (await check_client_id(db, id)) return id;
+      }
+    }
+  }
+
+  if (req_body.LastName) {
+    let last = `${req_body.LastName}`;
+    for (let m of numbers) {
+      let id = `${last}${m}`.substr(0,8);
+      if (await check_client_id(db, id)) return id;
+    }
+  }
+
+  throw new Error('ID generation failed.');
+}
+
+async function insert_client(req_body) {
+  let db = await connect();
+
+  let client_id = await generate_client_id(db, req_body);
+
+  let client = {...req_body, ID: client_id};
+
+  let {result} = await query(db, 'insert into CLIENT set ?', [client]);
+
+  result.insertId = client_id;
+
+  return result;
+}
+
+async function list_client() {
+  let {result, fields} = await single_query(`select * from CLIENT`);
+  return result;
+}
+
+async function query_client(id) {
+  let db = await connect();
+  let {result} = await query(db, 'select * from CLIENT where ID = ?', [id]);
+  return result;
+}
+
+async function modify_client(id, req_body){
+  let db = await connect();
+
+
+  let firstName = req_body.FirstName;
+  let lastName = req_body.LastName;
+  let email = req_body.Email;
+  let phone = req_body.Phone;
+  let billingMethod = req_body.BillingMethod;
+
+  let {result} = await query(db, "update `CLIENT` set `FirstName` = '" + firstName + "', `LastName` = '" +
+      lastName + "', `Email` = '" + email + "', `Phone` = '" + phone + "', `BillingMethod` = '" + billingMethod + "' WHERE `ID` = '" + id + "'");
+
+  return result;
+}
+
+async function delete_client(id, req_body){
+  let db = await connect();
+
+  let {result} = await query(db, "delete from CLIENT where ID = ?", [id]);
+  return result;
+}
+
+
+
+async function query_event(id) {
+  let db = await connect();
+  let {result} = await query(db, 'select * from EVENT where ID = ?', [id]);
+  return result;
+}
+
+async function modify_event(id, req_body){
+  let db = await connect();
+
+
+  let subject = req_body.Subject;
+  let type = req_body.Type;
+  let description = req_body.Description;
+  let budget = req_body.Budget;
+  let numGuests = req_body.NumGuests;
+  let desiredDate = req_body.DesiredDate;
+  let client = req_body.Client;
+  // let location = req_body.;
+
+  let {result} = await query(db, "update EVENT set Subject = '" + subject + "', `Type` = '" +
+      type + "', Description = '" + description + "', Budget = '" + budget + "', NumGuests = '" + numGuests +
+      "'DesiredDate = '" + desiredDate + "'Client'" + client + "' WHERE ID = '" + id);
+
+  return result;
+}
+
+async function delete_event(id, req_body){
+  let db = await connect();
+
+  let {result} = await query(db, "delete from EVENT where ID = ?", [id]);
+  return result;
+}
+
+
+module.exports = {list_client, insert_client, select_event, insert_event, list_venue, query_client, modify_client, delete_client,
+    query_event, modify_event, delete_event, select_all_supplier,query_supplier, insert_supplier, update_supplier, delete_supplier};
+
+
+
+
+
+

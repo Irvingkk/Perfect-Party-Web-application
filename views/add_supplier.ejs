@@ -1,17 +1,49 @@
-<%- include('_head.ejs', {title: 'add supplier'}) %>
+<%- include('_head.ejs', {title: 'Create Supplier'}) %>
+<form method="post">
+    <div class="w3-container light-border">
+        <table class="table table-hovered">
+            <tbody>
+            <tr>
+                <th scope="row">Name:</th>
+                <td><input type="text" name="Name"></td>
+            <tr>
+                <th scope="row">Contact Name:</th>
+                <td><input type="text" name="ContactName"></td>
+            <tr>
+                <th scope="row">Contact Phone:</th>
+                <td><input type="text" name="ContactPhone"></td>
+            </tbody>
+        </table>
 
+        <div class="w3-container light-border">
+            <h2>Item to provide</h2>
+            <table class="table table-hovered">
+                <tbody>
+                <tr>
+                    <th scope="row">Type:</th>
+                    <td><input type="text" name="type"></td>
+                <tr>
+                    <th scope="row">Name:</th>
+                    <td><input type="text" name="item_name"></td>
+                <tr>
+                    <th scope="row">Image:</th>
+                    <td><input type="text" name="image"></td>
+                <tr>
+                    <th scope="row">Length:</th>
+                    <td><input type="text" name="length"></td>
+                <tr>
+                    <th scope="row">Price:</th>
+                    <td><input type="text" name="price"></td>
+                </tbody>
+            </table>
+        </div>
+        <div class="w3-container" style="width:470px">
+            <input type="button" value="Cancel">
+            <input type="submit" value="Add">
+        </div> 
+		
+    </div>
 
-<form method='post'>
-  Id: <input type="number" name="ID">
-  <br>
-  Name: <input type="text" name="Name">
-  <br>
-  Contact Name: <input type="text" name="ContactName">
-  <br>
-  Contact Phone: <input type="text" name="ContactPhone">
-  <br>
- 
-  <input type="submit" value="Add">
 </form> 
 
 <%- include _tail.ejs %>

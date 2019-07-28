@@ -1,9 +1,10 @@
 <%- include('_head.ejs', {title: 'Table'}) %>
-<table style="width:100%" border="1">
+<table style="width:100%">
   <tr>
   <% columns.forEach((c)=>{ %>
     <th><%= c %></th>
   <% }) %>
+    <th>Modify</th>
   </tr>
 
   <% rows.forEach((r)=>{ %>
@@ -11,6 +12,10 @@
     <% columns.forEach((c)=>{ %>
     <td><%= r[c] %></td>
     <% }) %>
+      <td>
+        <a href="/event/edit/<%= r.ID %>" target="_blank" rel="noopener">Edit</a>
+        <a href="/event/delete/<%= r.ID %>">Delete</a>
+      </td>
   </tr>
   <% }) %>
 </table>
