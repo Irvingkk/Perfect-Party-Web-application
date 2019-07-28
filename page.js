@@ -58,7 +58,7 @@ router.get('/client/edit/:id', function (req, res, next){
     db.query_client(client_id).then(
         (result) => {
             res.status(200);
-            res.render('edit_client', {client: result[0]});
+            res.render('edit_client', {_client_: result[0]});
         },
         (error) => {
             console.log(error);
@@ -83,7 +83,7 @@ router.post('/client/edit/:id', function (req, res, next) {
 
 router.get('/client/delete/:id', function(req, res, next){
     let client_id = req.params.id;
-    db.delete_client(client_id, req.body).then(
+    db.delete_client(client_id).then(
         (result) => {
             res.status(200);
             res.redirect('/list_client');
@@ -103,13 +103,18 @@ router.get('/create_event', function(req, res, next) {
     /* on success, render with venue list */
     (result) => {
         res.status(200);
-      res.render('create_event', {venues: result});
+      res.render('create_event', {
+          event: null,
+          venues: result,
+          suppliers: supplier,
+          items: item
+      });
     },
     /* on failure, render with empty list */
     (error) => {
       console.error(error);
         res.status(400);
-      res.render('create_event', {venues: []});
+      res.render('create_event', {event: null, venues: []});
     }
   )
 });
