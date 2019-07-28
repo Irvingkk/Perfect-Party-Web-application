@@ -12,7 +12,7 @@
     <% columns.forEach((c)=>{ %>
     <td><%= r[c] %></td>
     <% }) %>
-    <td><button type="button">Modify</button></td>
+    <td><input type="submit" name="<%r.ID%>>" value="Modify"></td>
   </tr>
   <% }) %>
 </table>

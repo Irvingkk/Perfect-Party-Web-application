@@ -152,9 +152,37 @@ async function list_client() {
   return result;
 }
 
+async function query_client(id) {
+  let db = await connect();
+  let {result} = await query(db, 'select * from CLIENT where ID = ?', [id]);
+  return result;
+}
+
+async function modify_client(id, req_body){
+  let db = await connect();
 
 
-module.exports = {list_client, insert_client, select_event, insert_event, list_venue};
+  let firstName = req_body.FirstName;
+  let lastName = req_body.LastName;
+  let email = req_body.Email;
+  let phone = req_body.Phone;
+  let billingMethod = req_body.BillingMethod;
+
+  let {result} = await query(db, "update `CLIENT` set `FirstName` = '" + firstName + "', `LastName` = '" +
+      lastName + "', `Email` = '" + email + "', `Phone` = '" + phone + "', `BillingMethod` = '" + billingMethod + "' WHERE `ID` = '" + id + "'");
+
+  return result;
+}
+
+async function delete_client(id, req_body){
+  let db = await connect();
+
+  let {result} = await query(db, "delete from CLIENT where ID = ?", [id]);
+  return result;
+}
+
+
+module.exports = {list_client, insert_client, select_event, insert_event, list_venue, query_client, modify_client, delete_client};
 
 
 
