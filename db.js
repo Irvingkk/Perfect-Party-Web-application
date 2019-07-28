@@ -174,7 +174,7 @@ async function modify_client(id, req_body){
   return result;
 }
 
-async function delete_client(id, req_body){
+async function delete_client(id){
   let db = await connect();
 
   let {result} = await query(db, "delete from CLIENT where ID = ?", [id]);
