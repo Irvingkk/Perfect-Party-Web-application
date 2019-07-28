@@ -182,7 +182,43 @@ async function delete_client(id, req_body){
 }
 
 
-module.exports = {list_client, insert_client, select_event, insert_event, list_venue, query_client, modify_client, delete_client};
+
+async function query_event(id) {
+  let db = await connect();
+  let {result} = await query(db, 'select * from EVENT where ID = ?', [id]);
+  return result;
+}
+
+async function modify_event(id, req_body){
+  let db = await connect();
+
+
+  let subject = req_body.Subject;
+  let type = req_body.Type;
+  let description = req_body.Description;
+  let budget = req_body.Budget;
+  let numGuests = req_body.NumGuests;
+  let desiredDate = req_body.DesiredDate;
+  let client = req_body.Client;
+  // let location = req_body.;
+
+  let {result} = await query(db, "update EVENT set Subject = '" + subject + "', `Type` = '" +
+      type + "', Description = '" + description + "', Budget = '" + budget + "', NumGuests = '" + numGuests +
+      "'DesiredDate = '" + desiredDate + "'Client'" + client + "' WHERE ID = '" + id);
+
+  return result;
+}
+
+async function delete_event(id, req_body){
+  let db = await connect();
+
+  let {result} = await query(db, "delete from EVENT where ID = ?", [id]);
+  return result;
+}
+
+
+module.exports = {list_client, insert_client, select_event, insert_event, list_venue, query_client, modify_client, delete_client,
+query_event, modify_event, delete_event};
 
 
 

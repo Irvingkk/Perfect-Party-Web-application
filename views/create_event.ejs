@@ -8,7 +8,7 @@
       <input type="radio" name="Type" value="party">Party
       <input type="radio" name="Type" value="corporate event">Corporate Event
     </p>
-    <p>Subject:<input class="align-right" type="text" name="Subject"></p>
+    <p>Subject:<input class="align-right" type="text" name="Subject" ></p>
     <p>Budget:  <input class="align-right" type="text" name="Budget" min="0"></p>
     <p>Invitees:<input class="align-right" type="number" name="NumGuests" min="1"></p>
     <p>Client: <input class="align-right" type="text" name="Client"></p>
@@ -37,32 +37,32 @@
     <p>Price: <span id="location-price"></span></p>
     <p style="width:570px">
       <input type="button" value="Cancel" onclick="cancel_clicked()">
-      <input style="float:right" type="submit" value="Done" onclick="done_clicked()">
+      <input style="float:right" type="button" value="Next" onclick="next_clicked()">
     </p>
   </div>
 
-<!--  <div class="w3-container light-border" id="step3">-->
-<!--    <h2>Custom your Event</h2>-->
-<!--    <div class="w3-container light-border" id="menu" style="width:570px">-->
-<!--      <h3>Menu Item</h3>-->
-<!--      <p>Supplier</p>-->
-<!--      <p>Type</p>-->
-<!--    </div>-->
-<!--    <div class="w3-container light-border" id="decor" style="width:570px">-->
-<!--      <h3>Decor</h3>-->
-<!--      <p>Supplier</p>-->
-<!--      <p>Type</p>-->
-<!--    </div>-->
-<!--    <div class="w3-container light-border" id="musicOption" style="width:570px">-->
-<!--      <h3>Music/Entertainment Options</h3>-->
-<!--      <p>Supplier</p>-->
-<!--      <p>Type</p>-->
-<!--    </div>-->
-<!--    <p style="width:570px">-->
-<!--      <input type="button" value="Cancel" onclick="cancel_clicked()">-->
-<!--      <input style="float:right" type="button" value="Done" onclick="done_clicked()">-->
-<!--    </p>-->
-<!--  </div>-->
+  <div class="w3-container light-border" id="step3">
+    <h2>Custom your Event</h2>
+    <div class="w3-container light-border" id="menu" style="width:570px">
+      <h3>Menu Item</h3>
+      <p>Supplier</p>
+      <p>Type</p>
+    </div>
+    <div class="w3-container light-border" id="decor" style="width:570px">
+      <h3>Decor</h3>
+      <p>Supplier</p>
+      <p>Type</p>
+    </div>
+    <div class="w3-container light-border" id="musicOption" style="width:570px">
+      <h3>Music/Entertainment Options</h3>
+      <p>Supplier</p>
+      <p>Type</p>
+    </div>
+    <p style="width:570px">
+      <input type="button" value="Cancel" onclick="cancel_clicked()">
+      <input style="float:right" type="submit" value="Done">
+    </p>
+  </div>
 </form>
 
 <script>
@@ -99,9 +99,9 @@
     }
   }
 
-  function done_clicked() {
-    location.href= "/search_event";
 
+  if(isEdit){
+    document.querySelector("input[name='Subject']").value = events.subject;
   }
 </script>
 <%- include _tail.ejs %>

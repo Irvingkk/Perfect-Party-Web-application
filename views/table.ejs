@@ -12,7 +12,10 @@
     <% columns.forEach((c)=>{ %>
     <td><%= r[c] %></td>
     <% }) %>
-    <td><input type="submit" name="<%r.ID%>>" value="Modify"></td>
+      <td>
+        <a href="/event/edit/<%= r.ID %>" target="_blank" rel="noopener">Edit</a>
+        <a href="/event/delete/<%= r.ID %>">Delete</a>
+      </td>
   </tr>
   <% }) %>
 </table>

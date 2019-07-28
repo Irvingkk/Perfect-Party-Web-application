@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 // route to create_client page
 router.get('/create_client', function(req, res, next){
-  res.render('create_client',{response: ''});
+  res.render('create_client');
 });
 
 router.post('/create_client', function(req, res, next){
@@ -52,7 +52,7 @@ router.get('/list_client', function(req, res, next){
   );
 });
 
-// route to client edit
+// route to client edit or delete
 router.get('/client/edit/:id', function (req, res, next){
     let client_id = req.params.id;
     db.query_client(client_id).then(
@@ -173,6 +173,52 @@ router.post('/search_event', function(req, res, next) {
   );
 });
 
+// route to event edit or delete
+router.get('/event/edit/:id', function (req, res, next){
+    let event_id = req.params.id;
+    let venues = db.list_venue();
+    db.query_event(event_id).then(
+        (result) => {
+            res.status(200);
+            res.render('create_event', {
+                events: result[0],
+                ifEdit: true,
+                venues: venues
+            });
+        },
+        (error) => {
+            console.log(error);
+            res.status(400);
+        }
+    )
+});
 
+router.post('/event/edit/:id', function (req, res, next) {
+    let event_id = req.params.id;
+    db.modify_event(event_id, req.body).then(
+        (result) => {
+            res.status(200);
+            res.redirect('/search_event');
+        },
+        (error) => {
+            console.log(error);
+            res.status(400);
+        }
+    )
+});
+
+router.get('/event/delete/:id', function(req, res, next){
+    let event_id = req.params.id;
+    db.delete_event(event_id, req.body).then(
+        (result) => {
+            res.status(200);
+            res.redirect('/search_event');
+        },
+        (error) => {
+            console.log(error);
+            res.status(400);
+        }
+    )
+});
 
 module.exports = router;
