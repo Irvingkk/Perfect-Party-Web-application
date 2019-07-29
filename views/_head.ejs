@@ -2,10 +2,32 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src='/common.js' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <div>
-      <h1><%= title %>  <a href="/">Home</a></h1>
-    </div>
+	<div class="jumbotron">
+	  <h3 class="display-4"><%= title %></h1>
+	</div>
+
+	<nav class="navbar navbar-default" role="navigation">
+
+	<div class="container-fluid">
+
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">Go To</a>
+
+			<ul class="nav navbar-nav">
+				<li><a href="/">Home</a></li>
+				<li><a href="/create_event">Book Event</a></li>
+				<li><a href="/search_event">Search Event</a></li>
+				<li><a href="/create_client">Register client</a></li>
+				<li><a href="/manage_suppliers">Manage supplier</a></li>
+				<li><a href="/list_client">List client</a></li>
+			</ul>
+		</div>
+
+	</div>
+	</nav>
 

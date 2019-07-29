@@ -15,11 +15,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', pageRouter);
 
+
 // catch 404
 app.use(function(req, res, next) { 
   let error = new Error("Page Not Found");
   res.status(404);
   res.render('error', {error});
 })
-
-app.listen(3000, () => console.log(`Example app listening on port ${3000}!`))
+let port = 3206
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))

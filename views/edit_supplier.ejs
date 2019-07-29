@@ -1,0 +1,29 @@
+<%- include('_head.ejs', {title: 'Edit Supplier'}) %>
+
+<div class="container">
+
+    <% if (Supplier) { %>
+        <form method="post">
+            <div>
+                <div>
+                    <label>Name</label>
+                    <input type="text" name="Name" value="<%= Supplier.Name %>" required>
+                </div>
+                <div>
+                    <label>Contactor Name</label>
+                    <input type="text" name="ContactName" value="<%= Supplier.ContactName %>" required>
+                </div>
+                <div>
+                    <label>Phone</label>
+                    <input type="text" name="ContactPhone" value="<%= Supplier.ContactPhone %>" required>
+                </div>
+            </div>
+            
+            <input type="submit" value="Update Supplier"/>
+        </form>
+    <% } else { %>
+        <p class="text-center">Supplier Not Found.</p>
+    <% } %>
+</div>
+
+<%- include _tail.ejs %>

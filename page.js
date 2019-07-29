@@ -32,7 +32,7 @@ router.post('/create_client', function(req, res, next){
 
 // route to client table page
 router.get('/list_client', function(req, res, next){
-  db.list_client().then(
+  db.select_client().then(
     /* on success */
     (result) => {
       res.status(200);
@@ -55,8 +55,8 @@ router.get('/list_client', function(req, res, next){
 
 // route to client edit or delete
 router.get('/client/edit/:id', function (req, res, next){
-    let client_id = req.params.id;
-    db.query_client(client_id).then(
+    let ID = req.params.id;
+    db.select_client({ID}).then(
         (result) => {
             res.status(200);
             res.render('edit_client', {_client_: result[0]});
@@ -96,13 +96,6 @@ router.get('/client/delete/:id', function(req, res, next){
     )
 })
 
-
-
-
-// route to add_supplier page
-router.get('/add_supplier', function(req, res, next){
-    res.render('create_supplier');
-});
 
 
 // route to create_event page(multiple pages in one web page)
@@ -150,6 +143,11 @@ router.post('/create_event', function(req, res, next) {
   )
 });
 
+
+
+router.get('/search_client', function (req, res, next) {
+    res.render('search_client');
+});
 
 // route to event searching page (show add more codes to put an event table )
 router.get('/search_event', function(req, res, next) {
@@ -205,6 +203,118 @@ router.post('/search_event', function(req, res) {
     }
   );
 });
+
+/************* supplier below ****************/
+
+router.get('/add_supplier', function (req, res, next) {
+    res.render('add_supplier');
+});
+
+// insert
+router.post('/add_supplier', function (req, res, next) {
+    db.insert_supplier(req.body).then(
+      /* on success*/
+      (result) => {
+          console.log(result);
+          res.status(200);
+          message = "Successfully create supplier";
+          res.redirect('/manage_suppliers');
+
+      },
+      /* on failure, render with empty list */
+      (error) => {
+          console.error(error);
+          res.status(400);
+          res.send('Cannot create supplier.');
+      }
+    )
+});
+
+
+router.get('/manage_suppliers', function (req, res, next) {
+
+    db.select_all_supplier().then(
+            (result) => {
+                res.status(200);
+                res.render('manage_suppliers', { Supplier: result });
+            },
+        /* on failure */
+        (error) => {
+            console.error(error);
+            res.status(500);
+            res.send('Internal Error');
+        }
+      );
+
+});
+
+
+//query
+router.post('/manage_suppliers', function (req, res, next) {
+    db.select_supplier(req.body).then(
+        (result) => {
+            res.status(200);
+            res.render('manage_suppliers', { Supplier: result });
+        },
+    (error) => {
+        console.error(error);
+        res.status(500);
+        res.send('Internal Error');
+    }
+  );
+});
+
+// update
+router.get('/edit_supplier/:ID', function (req, res, next) {
+    
+    supplier_id = req.params.ID;
+    db.query_supplier(supplier_id, req.body).then(
+    (result) => {
+        console.log(result);
+        res.status(200);
+        res.render('edit_supplier', { Supplier: result[0] });
+    },
+    (error) => {
+        console.error(error);
+        res.status(500);
+        res.send('Internal Error');
+    }
+    );
+
+});
+
+router.post('/edit_supplier/:ID', function (req, res, next) {
+    db.update_supplier(req.body).then(
+            (result) => {
+                console.log(req.body);
+                res.status(200);
+                message = 'Changes saved.'
+                res.redirect('/manage_suppliers');
+            },
+            (error) => {
+                console.error(error);
+                res.status(500);
+                res.send('Internal Error');
+            }
+    );
+});
+
+//delete
+
+router.get('/delete_supplier/:ID', function (req, res, next) {
+    db.delete_supplier(req.params.ID).then(
+        (result) => {
+            res.status(200);
+            res.redirect('/manage_suppliers');
+        },
+        (error) => {
+            console.error(error);
+            res.status(500);
+            res.send('Internal Error');
+        }
+    );
+});
+
 
 // route to event edit or delete
 router.get('/event/edit/:id', function (req, res, next){
@@ -312,32 +422,5 @@ router.post('/event/:id/item/add', function (req, res, next) {
 
 
 
-
-
-
-
-
-
 module.exports = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

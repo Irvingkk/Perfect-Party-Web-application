@@ -1,0 +1,45 @@
+<%- include('_head.ejs', {title: 'Manage Suppliers'}) %>
+
+
+
+
+<form method='post'>
+  Name: <input type="text" name="Name">
+  <br>
+  Contact Name: <input type="text" name="ContactName">
+  <br>
+  Contact Phone: <input type="text" name="ContactPhone">
+  <br>
+  <input type="submit" value="Search">
+</form> 
+
+<a href="/add_supplier" >Add</a>
+
+    <div class="table-wrapper">
+        <% if (Supplier.length > 0) {%>
+            <table class="table table-hovered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Contact Name</th>
+                        <th scope="col">Phone</th>
+						<th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% Supplier.forEach((s) => { %>
+                        <tr>
+                            <td><%= s.Name %></td>
+                            <td><%= s.ContactName %></td>
+                            <td><%= s.ContactPhone %></td>
+							<td><a href="/edit_supplier/<%= s.Name %>" >edit</a> <a href="/delete_supplier/<%= s.Name %>" >delete</a></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p class="text-center">No suppliers found.</p>
+        <% } %>
+    </div>
+</div>
+<%- include _tail.ejs %>

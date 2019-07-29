@@ -1,7 +1,7 @@
 start transaction;
 
 create table ITEM (
-    ID char(8),
+    ID int AUTO_INCREMENT,
     Name varchar(128) not null,
     Price int,
     primary key (ID),
@@ -9,7 +9,7 @@ create table ITEM (
 );
 
 create table MENUITEM (
-    ItemId char(8),
+    ItemId int,
     Cuisine varchar(64),
     Calories int,
     Servings int,
@@ -21,7 +21,7 @@ create table MENUITEM (
 );
 
 create table DECORITEM (
-    ItemId char(8),
+    ItemId int,
     Brand varchar(64),
     Description varchar(4096),
     Image blob,
@@ -31,7 +31,7 @@ create table DECORITEM (
 );
 
 create table MUSICOPTION (
-    ItemId char(8),
+    ItemId int,
     Artist varchar(128),
     Album varchar(64),
     Genre varchar(64),
@@ -50,8 +50,8 @@ create table SUPPLIER (
 );
 
 create table PROVIDE (
-    ItemId char(8) not null,
-    Supplier varchar(20) not null,
+    ItemId int,
+    Supplier varchar(20),
     Cost int not null,
     primary key (ItemId , Supplier),
     foreign key (ItemId)
@@ -102,7 +102,7 @@ create table EVENT (
 
 create table USES (
     EventId int,
-    ItemId char(8),
+    ItemId int,
     Quantity int not null,
     primary key (ItemId , EventId),
     foreign key (ItemId)
