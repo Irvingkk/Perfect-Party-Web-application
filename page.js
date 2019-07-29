@@ -388,11 +388,11 @@ router.get('/event/:id/item/add', function (req, res, next) {
             }
             res.render('select_item', {
                 Menus: items['Menu'],
-                Menu_col: ['ItemId', 'Cuisine', 'Calories', 'Servings'],
+                Menu_col: ['ID', 'Name', 'Cuisine', 'Calories', 'Servings', 'Price'],
                 Decors: items['Decor'],
-                Decor_col: ['ItemId', 'Brand', 'Description', 'Image'],
+                Decor_col: ['ID', 'Name','Brand', 'Description', 'Price'],
                 Musics: items['Music'],
-                Music_col: ['ItemId', 'Artist', 'Album', 'Genre', 'Length']
+                Music_col: ['ID', 'Name','Artist', 'Album', 'Genre', 'Length', 'Price']
             });
         }, (error) =>{
             console.log(error);
@@ -403,6 +403,7 @@ router.get('/event/:id/item/add', function (req, res, next) {
 
 router.post('/event/:id/item/add', function (req, res, next) {
     let eventID = req.params.id;
+    console.log(req.body);
     db.insert_event_item(eventID, req.body).then(
         (result) => {
             res.status(200);

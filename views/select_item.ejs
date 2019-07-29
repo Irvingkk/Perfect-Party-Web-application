@@ -1,89 +1,84 @@
 <%- include('_head.ejs', {title: 'Select event items'}) %>
-<div class="w3-container light-border">
+<form method="post">
     <div class="w3-container light-border" id="table1" >
         <h2>Menu Table</h2>
-        <form method="post">
-            <table style="width:100%">
+        <table style="width:100%">
+            <tr>
+                <% Menu_col.forEach((c)=>{ %>
+                    <th><%= c %></th>
+                <% }) %>
+                <th>Action</th>
+            </tr>
+
+            <% Menus.forEach((r)=>{ %>
                 <tr>
                     <% Menu_col.forEach((c)=>{ %>
-                        <th><%= c %></th>
+                        <td><%= r[c] %></td>
                     <% }) %>
-                    <th>Action</th>
+                    <td>
+                        <input type="number" min="0" name="<%=Menus.ID%>" value="<%=Menus.Quantity%>" />
+                    </td>
                 </tr>
-
-                <% Menus.forEach((r)=>{ %>
-                    <tr>
-                        <% Menu_col.forEach((c)=>{ %>
-                            <td><%= r[c] %></td>
-                        <% }) %>
-                        <td>
-                            <%- include(`${item_action}.ejs`, {Menus: r}) %>
-                        </td>
-                    </tr>
-                <% }) %>
-            </table>
-        </form>
+            <% }) %>
+        </table>
     </div>
 
 
 
     <div class="w3-container light-border" id="table2" >
         <h2>Decoration Table</h2>
-        <form method="post">
-            <table style="width:100%">
+        <table style="width:100%">
+            <tr>
+                <% Decor_col.forEach((c)=>{ %>
+                    <th><%= c %></th>
+                <% }) %>
+                <th>Action</th>
+            </tr>
+
+            <% Decors.forEach((r)=>{ %>
                 <tr>
                     <% Decor_col.forEach((c)=>{ %>
-                        <th><%= c %></th>
+                        <td><%= r[c] %></td>
                     <% }) %>
-                    <th>Action</th>
+                    <td>
+                        <input type="number" min="0" name="<%=Decors.ID%>" value="0" />
+                    </td>
                 </tr>
-
-                <% Decors.forEach((r)=>{ %>
-                    <tr>
-                        <% Decor_col.forEach((c)=>{ %>
-                            <td><%= r[c] %></td>
-                        <% }) %>
-                        <td>
-                            <%- include(`${item_action}.ejs`, {Decors: r}) %>
-                        </td>
-                    </tr>
-                <% }) %>
-            </table>
-        </form>
+            <% }) %>
+        </table>
     </div>
 
 
 
     <div class="w3-container light-border" id="table3" >
         <h2>Music/Entertainment Table</h2>
-        <form method="post">
-            <table style="width:100%">
+        <table style="width:100%">
+            <tr>
+                <% Music_col.forEach((c)=>{ %>
+                    <th><%= c %></th>
+                <% }) %>
+                <th>Action</th>
+            </tr>
+
+            <% Musics.forEach((r)=>{ %>
                 <tr>
                     <% Music_col.forEach((c)=>{ %>
-                        <th><%= c %></th>
+                        <td><%= r[c] %></td>
                     <% }) %>
-                    <th>Action</th>
+                    <td>
+                        <input type="number" min="0" name="<%=Musics.ID%>" value="<%=Musics.Quantity%>" />
+                    </td>
                 </tr>
-
-                <% Musics.forEach((r)=>{ %>
-                    <tr>
-                        <% Music_col.forEach((c)=>{ %>
-                            <td><%= r[c] %></td>
-                        <% }) %>
-                        <td>
-                            <%- include(`${item_action}.ejs`, {Musics: r}) %>
-                        </td>
-                    </tr>
-                <% }) %>
-            </table>
-        </form>
+            <% }) %>
+        </table>
     </div>
 
     <p style="width:570px">
         <input type="button" value="Cancel" onclick="cancel_clicked()">
         <input style="float:right" type="submit" value="Add Items">
     </p>
-</div>
+</form>
+
 
 
 <%- include _tail.ejs%>
