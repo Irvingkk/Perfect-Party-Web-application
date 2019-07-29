@@ -22,5 +22,5 @@ app.use(function(req, res, next) {
   res.status(404);
   res.render('error', {error});
 })
-
-app.listen(3000, () => console.log(`Example app listening on port ${3000}!`))
+let port = 3206
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))

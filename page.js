@@ -32,7 +32,7 @@ router.post('/create_client', function(req, res, next){
 
 // route to client table page
 router.get('/list_client', function(req, res, next){
-  db.list_client().then(
+  db.select_client().then(
     /* on success */
     (result) => {
       res.status(200);
@@ -54,8 +54,8 @@ router.get('/list_client', function(req, res, next){
 
 // route to client edit or delete
 router.get('/client/edit/:id', function (req, res, next){
-    let client_id = req.params.id;
-    db.query_client(client_id).then(
+    let ID = req.params.id;
+    db.select_client({ID}).then(
         (result) => {
             res.status(200);
             res.render('edit_client', {_client_: result[0]});
@@ -294,9 +294,10 @@ router.get('/delete_supplier/:ID', function (req, res, next) {
 
 // route to event edit or delete
 router.get('/event/edit/:id', function (req, res, next){
-    let event_id = req.params.id;
+    let ID = req.params.id;
+
     let venues = db.list_venue();
-    db.query_event(event_id).then(
+    db.select_event({ID}).then(
         (result) => {
             res.status(200);
             res.render('create_event', {
