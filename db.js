@@ -77,79 +77,8 @@ function generate_conditions(body, pattern){
 }
 
 
-
-async function select_all_supplier() {
-    let {result, fields} = await single_query(`select * from SUPPLIER`);
-    return result;
-}
-
-
-
-
-
-
-async function select_supplier(req_body, columns) {
-
-    let conditions = []
-    let values = []
-
-    if (req_body) {
-        for (element of ['Name', 'ContactName','ContactPhone']) {
-            let val = req_body[element];
-            if (req_body[element]) {
-                conditions.push(` ${element} = ?`);
-                values.push(val);
-            }
-        }
-
-    }
-
-    let where_clause = conditions.length > 0 ? `where ${conditions.join(' and')}` : '';
-    let column_clause = columns ? columns.join(',') : '*';
-
-    let {result, fields} = await single_query(`select ${column_clause} from SUPPLIER ${where_clause}`, values);
-    return result;
-}
-
-
-async function list_venue() {
-  let {result, fields} = await single_query(`select ID,Address,Capacity,Price from VENUE`);
-  return result;
-}
-
 function to_where_clause(conditions) {
   return conditions.length > 0 ? `where ${conditions.join(' and ')}` : '';
-}
-
-async function query_supplier(id, req_body){
-    db = await connect();
-    let {result} = await query(db, 'select * from SUPPLIER where Name = ?', [id]);
-    return result;
-}
-async function insert_supplier(req_body) {
-
-    let {result, fields} = await single_query('insert into SUPPLIER set ?', req_body);
-    return result;
-}
-
-async function update_supplier(req) {
-
-    let ID = req.params.ID;
-    let Name = req.body.Name;
-    let ContactName = req.body.ContactName;
-    let ContactPhone = req.body.ContactPhone;
-
-    let query = "UPDATE SUPPLIER SET Name = ?, ContactName = ?, ContactPhone = ?," +
-                "where ID = ?";
-
-    await single_query(query,[Name, ContactName, ContactPhone, ID]);
-}
-
-async function delete_supplier(id) {
-
-    db = await connect();
-    let {result} = await query(db, 'DELETE FROM SUPPLIER WHERE ID = ?', [id]);
-    return result;
 }
 
 
@@ -205,6 +134,46 @@ async function generate_client_id(db, req_body) {
 
 
 
+async function select_supplier(req_body, columns) {
+
+    let pattern = {
+      partial: ['Name', 'ContactName'],
+      exact: ['ContactPhone']
+    }
+    let {conditions, values} = generate_conditions(req_body, pattern)
+
+    let column_clause = columns ? columns.join(',') : '*';
+
+    let {result, fields} = await single_query(
+      `select ${column_clause} from SUPPLIER ${to_where_clause(conditions)}`, values);
+    return result;
+}
+
+
+async function insert_supplier(req_body) {
+    let {result, fields} = await single_query('insert into SUPPLIER set ?', req_body);
+    return result;
+}
+
+async function modify_supplier(req) {
+
+    let ID = req.params.ID;
+    let Name = req.body.Name;
+    let ContactName = req.body.ContactName;
+    let ContactPhone = req.body.ContactPhone;
+
+    let query = "UPDATE SUPPLIER SET Name = ?, ContactName = ?, ContactPhone = ?," +
+                "where ID = ?";
+
+    await single_query(query,[Name, ContactName, ContactPhone, ID]);
+}
+
+async function delete_supplier(id) {
+    let {result} = await single_query(db, 'DELETE FROM SUPPLIER WHERE ID = ?', [id]);
+    return result;
+}
+
+
 
 
 async function select_event(req_body, columns) {
@@ -254,6 +223,9 @@ async function modify_event(id, req_body){
 
   return result;
 }
+
+
+
 
 async function insert_client(req_body) {
   let db = await connect();
@@ -307,6 +279,7 @@ async function list_venue() {
 
 
 
+
 const item_type_table = {
   "Menu" : "MENUITEM",
   "Decor" : "DECORITEM",
@@ -324,6 +297,9 @@ const item_type_pattern = {
   "Decor" : { partial: ["Brand", "Description"] },
   "Music" : { partial: ["Artist", "Album", "Genre"], range_num: ["Length"]}
 }
+
+
+
 
 async function insert_event_item(event_id, usage) {
   /**
@@ -348,6 +324,9 @@ async function list_event_item(event_id) {
   
   return result;
 }
+
+
+
 
 async function select_item(req_body) {
 
@@ -399,6 +378,7 @@ async function select_item(req_body) {
 module.exports = {
   select_client, insert_client, modify_client, delete_client,
   select_event, insert_event, modify_event, delete_event,
+  select_supplier, insert_supplier, modify_supplier, delete_supplier,
   list_venue,
   insert_event_item, list_event_item,
   select_item,
