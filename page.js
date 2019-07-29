@@ -40,7 +40,8 @@ router.get('/list_client', function(req, res, next){
         {
           rows: result,
           columns: ['ID', 'FirstName', 'LastName', 'Email', 'Phone', 'BillingMethod'],
-          action: 'client_action'
+            action: 'client_action',
+            last_column: 'Action',
         }
       );
     },
@@ -362,8 +363,10 @@ router.get('/event/delete/:id', function(req, res, next){
 // route to add_item page for event
 router.get('/event/:id/item', function (req,res,next) {
     let event_id = req.params.id;
+    console.log(event_id);
     db.list_event_item(event_id).then(
         (result) => {
+            console.log(result);
             res.status(200);
             res.render('search_item', {
                 rows: result,
@@ -378,8 +381,10 @@ router.get('/event/:id/item', function (req,res,next) {
 });
 
 router.get('/event/:id/item/add', function (req, res, next) {
+    console.log(req.query);
     db.select_item(req.query).then(
         (result) => {
+            console.log(result);
             res.status(200);
             let items = {};
             for (let row of result) {
@@ -387,11 +392,11 @@ router.get('/event/:id/item/add', function (req, res, next) {
                 items[row.Type].push(row);
             }
             res.render('select_item', {
-                Menus: items['Menu'],
+                Menus: items['Menu'] || [],
                 Menu_col: ['ID', 'Name', 'Cuisine', 'Calories', 'Servings', 'Price'],
-                Decors: items['Decor'],
+                Decors: items['Decor'] || [],
                 Decor_col: ['ID', 'Name','Brand', 'Description', 'Price'],
-                Musics: items['Music'],
+                Musics: items['Music'] || [],
                 Music_col: ['ID', 'Name','Artist', 'Album', 'Genre', 'Length', 'Price']
             });
         }, (error) =>{
@@ -404,7 +409,7 @@ router.get('/event/:id/item/add', function (req, res, next) {
 router.post('/event/:id/item/add', function (req, res, next) {
     let eventID = req.params.id;
     console.log(req.body);
-    db.insert_event_item(eventID, req.body).then(
+    db.modify_event_item(eventID, req.body).then(
         (result) => {
             res.status(200);
             res.redirect('/event/'+ eventID +'/item');

@@ -7,7 +7,7 @@
                 <% Menu_col.forEach((c)=>{ %>
                     <th><%= c %></th>
                 <% }) %>
-                <th>Action</th>
+                <th>Quantity</th>
             </tr>
 
             <% Menus.forEach((r)=>{ %>
@@ -16,7 +16,7 @@
                         <td><%= r[c] %></td>
                     <% }) %>
                     <td>
-                        <input type="number" min="0" name="<%=Menus.ID%>" value="<%=Menus.Quantity%>" />
+                        <input type="number" min="0" name="<%=r.ID%>" value="0" />
                     </td>
                 </tr>
             <% }) %>
@@ -32,7 +32,7 @@
                 <% Decor_col.forEach((c)=>{ %>
                     <th><%= c %></th>
                 <% }) %>
-                <th>Action</th>
+                <th>Quantity</th>
             </tr>
 
             <% Decors.forEach((r)=>{ %>
@@ -41,7 +41,7 @@
                         <td><%= r[c] %></td>
                     <% }) %>
                     <td>
-                        <input type="number" min="0" name="<%=Decors.ID%>" value="0" />
+                        <input type="number" min="0" name="<%=r.ID%>" value="0" />
                     </td>
                 </tr>
             <% }) %>
@@ -57,7 +57,7 @@
                 <% Music_col.forEach((c)=>{ %>
                     <th><%= c %></th>
                 <% }) %>
-                <th>Action</th>
+                <th>Quantity</th>
             </tr>
 
             <% Musics.forEach((r)=>{ %>
@@ -66,7 +66,7 @@
                         <td><%= r[c] %></td>
                     <% }) %>
                     <td>
-                        <input type="number" min="0" name="<%=Musics.ID%>" value="<%=Musics.Quantity%>" />
+                        <input type="number" min="0" name="<%=r.ID%>" value="0" />
                     </td>
                 </tr>
             <% }) %>
@@ -75,7 +75,7 @@
 
     <p style="width:570px">
         <input type="button" value="Cancel" onclick="cancel_clicked()">
-        <input style="float:right" type="submit" value="Add Items">
+        <input style="float:right" type="submit" value="Modify Items">
     </p>
 </form>
 

@@ -4,7 +4,9 @@
             <% columns.forEach((c)=>{ %>
                 <th><%= c %></th>
             <% }) %>
-            <th>Action</th>
+            <% if (last_column && action) { %>
+                <th><%= last_column %></th>
+            <% } %>
         </tr>
 
         <% rows.forEach((r)=>{ %>
@@ -12,9 +14,9 @@
                 <% columns.forEach((c)=>{ %>
                     <td><%= r[c] %></td>
                 <% }) %>
-                <td>
-                    <%- include(`${action}.ejs`, {row: r}) %>
-                </td>
+                <% if (last_column && action) { %>
+                    <td><%- include(`${action}.ejs`, {row: r}) %>  </td>
+                <% }%>
             </tr>
         <% }) %>
     </table>

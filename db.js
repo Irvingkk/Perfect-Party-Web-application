@@ -48,10 +48,12 @@ function generate_conditions(body, pattern){
     }
 
     for (let element of pattern.range_num || []) {
-      let from_val = Number(body[`${element}From`]);
-      let to_val = Number(body[`${element}To`]);
-      if ((!isNaN(from_val)) && (!isNaN(to_val))) {
-        conditions.push(`${element} >= ?`, `${element} >= ?`);
+      let from_str = body[`${element}From`];
+      let to_str = body[`${element}To`];
+      let from_val = Number(from_str);
+      let to_val = Number(to_str);
+      if (!isNaN(from_val) && !isNaN(to_val) && from_str && to_str) {
+        conditions.push(`${element} >= ?`, `${element} <= ?`);
         values.push(from_val, to_val);
       }
     }
@@ -304,23 +306,36 @@ async function modify_event_item(event_id, usage) {
   /**
    * usage is an object {id1: quantity1, id2:quantity2, ...}
    */
-  let clauses = []
-  let values = []
+  let replace_clauses = [];
+  let replace_values = [];
+  let delete_cond = [];
+  let delete_values = [];
+
   Object.keys(usage).forEach((item_id)=>{
-    clauses.push(' (?, ?, ?)');
-    values.push(parseInt(event_id), parseInt(item_id), parseInt(usage[item_id]));
+    let quantity = parseInt(usage[item_id]);
+    if (quantity > 0) {
+      replace_clauses.push(' (?, ?, ?)');
+      replace_values.push(parseInt(event_id), Number(item_id), parseInt(usage[item_id]));
+    } else {
+      delete_cond.push('ItemId = ?');
+      delete_values.push(Number(item_id));
+    }
   });
 
-  if (clauses.length > 0) {
+  if (replace_clauses.length > 0) {
     let {result} = await single_query(
-      `replace into USES (EventId, ItemId, Quantity) values ${clauses.join(',')}`, values);
-    return result;
+      `replace into USES (EventId, ItemId, Quantity) values ${replace_clauses.join(',')}`, replace_values);
+  }
+
+  if (delete_cond.length > 0) {
+    let {result} = await single_query(
+        `delete from USES where EventId = ? and (${delete_cond.join(' or ')})`, [event_id, ...delete_values]);
   }
 }
 
 async function list_event_item(event_id) {
   let {result} = await single_query(
-    `select ID, Name, Quantity from ITEM, USES where ID = ItemId, ID = ?`, [event_id]);
+    `select ID, Name, Quantity, Price from ITEM, USES where ID = ItemId and EventId = ?`, [Number(event_id)]);
   
   return result;
 }
@@ -374,6 +389,7 @@ async function select_item(req_body) {
     val.push(`${req_body.Type}`);
   }
 
+  console.log(`select ${column_clause} ${from_clause} ${to_where_clause(cond)}`)
   let {result} = await single_query(
     `select ${column_clause} ${from_clause} ${to_where_clause(cond)}`, val);
   
