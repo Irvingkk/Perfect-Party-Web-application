@@ -273,7 +273,7 @@ router.get('/edit_supplier/:ID', function (req, res, next) {
 });
 
 router.post('/edit_supplier/:ID', function (req, res, next) {
-    db.modify_supplier(req.body).then(
+    db.modify_supplier(req).then(
             (result) => {
                 console.log(req.body);
                 res.status(200);

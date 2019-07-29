@@ -157,15 +157,14 @@ async function insert_supplier(req_body) {
 
 async function modify_supplier(req) {
 
-    let ID = req.params.ID;
-    let Name = req.body.Name;
+    let Name = req.params.ID;
     let ContactName = req.body.ContactName;
     let ContactPhone = req.body.ContactPhone;
 
-    let query = "UPDATE SUPPLIER SET Name = ?, ContactName = ?, ContactPhone = ?," +
-                "where ID = ?";
+    let query = "UPDATE SUPPLIER SET ContactName = ?, ContactPhone = ?" +
+                "where Name = ?";
 
-    await single_query(query,[Name, ContactName, ContactPhone, ID]);
+    await single_query(query,[ContactName, ContactPhone, Name]);
 }
 
 async function delete_supplier(id) {
