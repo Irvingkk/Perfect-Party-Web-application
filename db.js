@@ -325,50 +325,57 @@ async function list_event_item(event_id) {
   return result;
 }
 
-
-
-
 async function select_item(req_body) {
 
-  let from_clause = " from ITEM";
-  let column_clause = "ID, Name, Price";
-  let conditions = [];
-  let values = [];
+  let from_clause = "from";
+  let column_clause = "";
+  let cond = [], val = [];
 
-  if (req_body) {
-
-    if (req_body.Type) {
-      let type = req_body.Type;
-      let table = item_type_table[type];
-      let columns = item_type_colums[type];
-      let pattern = item_type_pattern[type];
-
-      if (!table || !pattern || !columns) return [];
-
-      let _ = generate_conditions(req_body, pattern);
-
-      conditions.push(..._.conditions);
-      values.push(..._.values);
-      from_clause += ` join ${table} on ID = ItemId`;
-      column_clause += `, ${columns.join(', ')}`;
-    } else {
-
-    }
-
+  {
     let pattern = {
       exact_num: ['ID'],
       partial: ['Name'],
       range_num: ['Price']
     }
-  
-    let _ = generate_conditions(req_body, pattern);
-    conditions.push(..._.conditions);
-    values.push(..._.values);
+    let {conditions, values} = generate_conditions(req_body, pattern);
 
+    cond.push(...conditions);
+    val.push(...values);
+
+    from_clause += ' ITEM';
+    column_clause = " ITEM.ID as ID, ITEM.Name as Name, ITEM.Price as Price";
+  }
+
+  {
+    let type_case = Object.keys(item_type_table).map((Type)=>
+        `when ID in (select ItemId from ${item_type_table[Type]}) then '${Type}'`
+    );
+    column_clause += `, case ${type_case.join(' ')} end as Type`
+  }
+  
+  Object.keys(item_type_table).forEach((type)=>{
+    let table = item_type_table[type];
+    let columns = item_type_colums[type];
+    let pattern = item_type_pattern[type];
+
+    if (!table || !pattern || !columns) return;
+
+    let {conditions, values} = generate_conditions(req_body, pattern);
+
+    cond.push(...conditions);
+    val.push(...values);
+  
+    from_clause += ` left join ${table} on ITEM.ID = ${table}.ItemId`;
+    column_clause += `, ${columns.map((c)=>`${table}.${c} as ${c}`).join(', ')}`;
+  })
+
+  if (req_body && req_body.Type) {
+    cond.push('Type = ?');
+    val.push(`${req_body.Type}`);
   }
 
   let {result} = await single_query(
-    `select ${column_clause} ${from_clause} ${to_where_clause(conditions)}`, values);
+    `select ${column_clause} ${from_clause} ${to_where_clause(cond)}`, val);
   
   return result;
 }
