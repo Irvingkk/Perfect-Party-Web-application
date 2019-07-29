@@ -38,8 +38,8 @@ function generate_conditions(body, pattern){
   let conditions = [];
   let values = [];
 
-  if (req_body) {
-    for (element of pattern.exact_num || []) {
+  if (body) {
+    for (let element of pattern.exact_num || []) {
       let val = Number(body[element]);
       if (!isNaN(val)) {
         conditions.push(`${element} = ?`);
@@ -47,7 +47,7 @@ function generate_conditions(body, pattern){
       }
     }
 
-    for (element of pattern.range_num || []) {
+    for (let element of pattern.range_num || []) {
       let from_val = Number(body[`${element}From`]);
       let to_val = Number(body[`${element}To`]);
       if ((!isNaN(from_val)) && (!isNaN(to_val))) {
@@ -56,17 +56,17 @@ function generate_conditions(body, pattern){
       }
     }
   
-    for (element of pattern.exact || []) {
-      let val = req_body[element];
+    for (let element of pattern.exact || []) {
+      let val = body[element];
       if (val) {
         conditions.push(`${element} = ?`);
         values.push(`${val}`);
       }
     }
 
-    for (element of pattern.partial || []) {
-      let val = req_body[element];
-      if (req_body[element]) {
+    for (let element of pattern.partial || []) {
+      let val = body[element];
+      if (body[element]) {
         conditions.push(`${element} like ?`);
         values.push(`%${val}%`);
       }
@@ -362,7 +362,7 @@ async function select_item(req_body) {
     }
   
     let _ = generate_conditions(req_body, pattern);
-    conditions.push(..._.conditions.map((cond)=> `I.${cond}`));
+    conditions.push(..._.conditions);
     values.push(..._.values);
 
   }

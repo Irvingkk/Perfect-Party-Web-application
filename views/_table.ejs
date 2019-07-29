@@ -1,0 +1,21 @@
+<form method="post">
+    <table style="width:100%">
+        <tr>
+            <% columns.forEach((c)=>{ %>
+                <th><%= c %></th>
+            <% }) %>
+            <th>Action</th>
+        </tr>
+
+        <% rows.forEach((r)=>{ %>
+            <tr>
+                <% columns.forEach((c)=>{ %>
+                    <td><%= r[c] %></td>
+                <% }) %>
+                <td>
+                    <%- include(`${action}.ejs`, {row: r}) %>
+                </td>
+            </tr>
+        <% }) %>
+    </table>
+</form>

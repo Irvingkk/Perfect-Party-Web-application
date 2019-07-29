@@ -1,6 +1,6 @@
 <%- include('_head.ejs', {title: 'Add Items'}) %>
 <div class="w3-container light-border">
-    <form method="get" action="add">
+    <form method="get" action="item/add">
         <p>Item Name: <input type="text" name="Name" placeholder="Enter item to search"></p>
         <p>Price:</p>
         <p>from <input type="number" name="PriceFrom">  to <input type="number" name="PriceTo"></p>
@@ -17,6 +17,6 @@
     </script>
 </div>
 
-<%- include('table.ejs', {action: 'item_action'}) %>
+<%- include('_table.ejs', {action: 'item_action'}) %>
 
 <%- include _tail.ejs %>

@@ -8,13 +8,13 @@
       <input type="radio" name="Type" value="party">Party
       <input type="radio" name="Type" value="corporate event">Corporate Event
     </p>
-    <p>Subject:<input class="align-right" type="text" name="Subject" ></p>
-    <p>Budget:  <input class="align-right" type="text" name="Budget" min="0"></p>
-    <p>Invitees:<input class="align-right" type="number" name="NumGuests" min="1"></p>
-    <p>Client: <input class="align-right" type="text" name="Client"></p>
-    <p>Date:  <input type="date" name="DesiredDate"> </p>
+    <p>Subject:<input class="align-right" type="text" name="Subject" value="<%= _event_? _event_.Subject: ''%>" ></p>
+    <p>Budget:  <input class="align-right" type="text" name="Budget" min="0" value="<%= _event_? _event_.Budget: ''%>"></p>
+    <p>Invitees:<input class="align-right" type="number" name="NumGuests" min="1" value="<%= _event_? _event_.NumGuests: ''%>"></p>
+    <p>Client: <input class="align-right" type="text" name="Client" value="<%= _event_? _event_.Client: ''%>"></p>
+    <p>Date:  <input type="date" name="DesiredDate" value="<%= _event_? _event_.DesiredDate: ''%>"> </p>
     <p>Description:</p>
-    <textarea rows="4" cols="50" name="Description"></textarea>
+    <textarea rows="4" cols="50" name="Description"><%= _event_? _event_.Description: ''%></textarea>
 
     <p style="width:570px">
       <input type="button" value="Cancel" onclick="cancel_clicked()">
@@ -37,7 +37,7 @@
     <p>Price: <span id="location-price"></span></p>
     <p style="width:570px">
       <input type="button" value="Cancel" onclick="cancel_clicked()">
-      <input style="float:right" type="button" value="Next" onclick="next_clicked()">
+      <input style="float:right" type="submit" value="Done">
     </p>
   </div>
 </form>

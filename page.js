@@ -102,25 +102,15 @@ router.get('/client/delete/:id', function(req, res, next){
 router.get('/create_event', function(req, res, next) {
   db.list_venue().then(
     /* on success, render with venue list */
-    (result) => {
+    (venues) => {
         res.status(200);
-      // res.render('create_event',
-      //     {
-      //     event: null,
-      //     venues: result,
-      //     suppliers: supplier,
-      //     items: item}
-      //     );
-        res.render('create_event',
-            {
-                venues: result
-            })
+        res.render('create_event', {_event_: null, venues})
     },
     /* on failure, render with empty list */
     (error) => {
       console.error(error);
         res.status(400);
-      res.render('create_event', {event: null, venues: []});
+      res.render('create_event', {_event_: null, venues: []});
     }
   )
 });
@@ -217,7 +207,6 @@ router.post('/add_supplier', function (req, res, next) {
       (result) => {
           console.log(result);
           res.status(200);
-          message = "Successfully create supplier";
           res.redirect('/manage_suppliers');
 
       },
@@ -233,7 +222,7 @@ router.post('/add_supplier', function (req, res, next) {
 
 router.get('/manage_suppliers', function (req, res, next) {
 
-    db.select_all_supplier().then(
+    db.select_supplier().then(
             (result) => {
                 res.status(200);
                 res.render('manage_suppliers', { Supplier: result });
@@ -267,8 +256,8 @@ router.post('/manage_suppliers', function (req, res, next) {
 // update
 router.get('/edit_supplier/:ID', function (req, res, next) {
     
-    supplier_id = req.params.ID;
-    db.query_supplier(supplier_id, req.body).then(
+    let ID = req.params.ID;
+    db.select_supplier({ID}).then(
     (result) => {
         console.log(result);
         res.status(200);
@@ -284,7 +273,7 @@ router.get('/edit_supplier/:ID', function (req, res, next) {
 });
 
 router.post('/edit_supplier/:ID', function (req, res, next) {
-    db.update_supplier(req.body).then(
+    db.modify_supplier(req.body).then(
             (result) => {
                 console.log(req.body);
                 res.status(200);
@@ -318,17 +307,22 @@ router.get('/delete_supplier/:ID', function (req, res, next) {
 
 // route to event edit or delete
 router.get('/event/edit/:id', function (req, res, next){
-    let event_id = req.params.id;
-    db.list_venue()
-    db.query_event(event_id).then(
-        (result) => {
-            res.status(200);
-            res.render('create_event', {
-                // events: result[0],
-                // ifEdit: true,
-                venues: venues
-            });
-        },
+    let ID = req.params.id;
+
+    db.select_event({ID}).then(
+        (events) => {
+            let _event_ = events[0];
+            db.list_venue().then(
+            (venues)=> {
+                console.log(_event_);
+                res.status(200);
+                res.render('create_event', {_event_, venues});
+            },
+            (error)=> {
+                res.status(200);
+                res.render('create_event', {_event_, venues:[]});
+            }
+         )},
         (error) => {
             console.log(error);
             res.status(400);
@@ -409,7 +403,7 @@ router.get('/event/:id/item/add', function (req, res, next) {
 
 router.post('/event/:id/item/add', function (req, res, next) {
     let eventID = req.params.id;
-    db.add_event_item(eventID, req.body).then(
+    db.insert_event_item(eventID, req.body).then(
         (result) => {
             res.status(200);
             res.redirect('/event/'+ eventID +'/item');
