@@ -301,7 +301,7 @@ const item_type_pattern = {
 
 
 
-async function insert_event_item(event_id, usage) {
+async function modify_event_item(event_id, usage) {
   /**
    * usage is an object {id1: quantity1, id2:quantity2, ...}
    */
@@ -312,15 +312,16 @@ async function insert_event_item(event_id, usage) {
     values.push(parseInt(event_id), parseInt(item_id), parseInt(usage[item_id]));
   });
 
-  let {result} = await single_query(
-    `insert into USES (EventId, ItemId, Quantity) values ${clauses.join(',')}`, values);
-
-  return result;
+  if (clauses.length > 0) {
+    let {result} = await single_query(
+      `replace into USES (EventId, ItemId, Quantity) values ${clauses.join(',')}`, values);
+    return result;
+  }
 }
 
 async function list_event_item(event_id) {
   let {result} = await single_query(
-    `select ID, Name, Quantity from ITEM, USES where ID = ?`, [event_id]);
+    `select ID, Name, Quantity from ITEM, USES where ID = ItemId, ID = ?`, [event_id]);
   
   return result;
 }
@@ -387,7 +388,7 @@ module.exports = {
   select_event, insert_event, modify_event, delete_event,
   select_supplier, insert_supplier, modify_supplier, delete_supplier,
   list_venue,
-  insert_event_item, list_event_item,
+  modify_event_item, list_event_item,
   select_item,
   };
 
