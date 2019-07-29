@@ -1,22 +1,23 @@
 <%- include('_head.ejs', {title: 'Table'}) %>
-<table style="width:100%">
-  <tr>
-  <% columns.forEach((c)=>{ %>
-    <th><%= c %></th>
-  <% }) %>
-    <th>Modify</th>
-  </tr>
+<form method="post">
+    <table style="width:100%">
+    <tr>
+        <% columns.forEach((c)=>{ %>
+            <th><%= c %></th>
+        <% }) %>
+        <th>Action</th>
+    </tr>
 
-  <% rows.forEach((r)=>{ %>
-  <tr>
-    <% columns.forEach((c)=>{ %>
-    <td><%= r[c] %></td>
+    <% rows.forEach((r)=>{ %>
+        <tr>
+            <% columns.forEach((c)=>{ %>
+                <td><%= r[c] %></td>
+            <% }) %>
+         <td>
+             <%- include(`${action}.ejs`, {row: r}) %>
+         </td>
+        </tr>
     <% }) %>
-      <td>
-        <a href="/event/edit/<%= r.ID %>" target="_blank" rel="noopener">Edit</a>
-        <a href="/event/delete/<%= r.ID %>">Delete</a>
-      </td>
-  </tr>
-  <% }) %>
-</table>
+    </table>
+</form>
 <%- include _tail.ejs %>

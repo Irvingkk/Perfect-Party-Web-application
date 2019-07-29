@@ -36,10 +36,11 @@ router.get('/list_client', function(req, res, next){
     /* on success */
     (result) => {
       res.status(200);
-      res.render('list_client',
+      res.render('table',
         {
-          clients: result,
+          rows: result,
           columns: ['ID', 'FirstName', 'LastName', 'Email', 'Phone', 'BillingMethod'],
+          action: 'client_action'
         }
       );
     },
@@ -110,12 +111,17 @@ router.get('/create_event', function(req, res, next) {
     /* on success, render with venue list */
     (result) => {
         res.status(200);
-      res.render('create_event', {
-          event: null,
-          venues: result,
-          suppliers: supplier,
-          items: item
-      });
+      // res.render('create_event',
+      //     {
+      //     event: null,
+      //     venues: result,
+      //     suppliers: supplier,
+      //     items: item}
+      //     );
+        res.render('create_event',
+            {
+                venues: result
+            })
     },
     /* on failure, render with empty list */
     (error) => {
@@ -147,10 +153,31 @@ router.post('/create_event', function(req, res, next) {
 
 // route to event searching page (show add more codes to put an event table )
 router.get('/search_event', function(req, res, next) {
-  res.render('search_event');
+    db.select_event(req.body).then(
+        /* on success */
+        (result) => {
+            res.status(200);
+            res.render('search_event',
+                {
+                    rows: result,
+                    columns: [
+                        'ID', 'Subject', 'Type', 'Description', 'Budget',
+                        'NumGuests', 'DesiredDate', 'Client','Location'
+                    ],
+                    action: 'event_action'
+                }
+            );
+        },
+        /* on failure */
+        (error) => {
+            console.error(error);
+            res.status(500);
+            res.send('Internal Error');
+        }
+    );
 });
 
-router.post('/search_event', function(req, res, next) {
+router.post('/search_event', function(req, res) {
   /**
    * req.body should look like:
    * { Subject: xxx, Type: xxx, Client: xxx, Location:xxx }
@@ -159,13 +186,14 @@ router.post('/search_event', function(req, res, next) {
     /* on success */
     (result) => {
       res.status(200);
-      res.render('table', 
+      res.render('search_event',
         {
           rows: result,
           columns: [
             'ID', 'Subject', 'Type', 'Description', 'Budget',
             'NumGuests', 'DesiredDate', 'Client','Location'
           ],
+          action: 'event_action'
         }
       );
     },
@@ -181,13 +209,13 @@ router.post('/search_event', function(req, res, next) {
 // route to event edit or delete
 router.get('/event/edit/:id', function (req, res, next){
     let event_id = req.params.id;
-    let venues = db.list_venue();
+    db.list_venue()
     db.query_event(event_id).then(
         (result) => {
             res.status(200);
             res.render('create_event', {
-                events: result[0],
-                ifEdit: true,
+                // events: result[0],
+                // ifEdit: true,
                 venues: venues
             });
         },
@@ -226,4 +254,90 @@ router.get('/event/delete/:id', function(req, res, next){
     )
 });
 
+
+// route to add_item page for event
+router.get('/event/:id/item', function (req,res,next) {
+    let event_id = req.params.id;
+    db.list_event_item(event_id).then(
+        (result) => {
+            res.status(200);
+            res.render('search_item', {
+                rows: result,
+                columns: ['ID', 'Name', 'Price', 'Quantity']
+            })
+        },
+        (error) =>{
+            console.log(error);
+            res.status(400);
+        }
+    )
+});
+
+router.get('/event/:id/item/add', function (req, res, next) {
+    db.select_item(req.query).then(
+        (result) => {
+            res.status(200);
+            let items = {};
+            for (let row of result) {
+                if (!items[row.Type]) items[row.Type] = [];
+                items[row.Type].push(row);
+            }
+            res.render('select_item', {
+                Menus: items['Menu'],
+                Menu_col: ['ItemId', 'Cuisine', 'Calories', 'Servings'],
+                Decors: items['Decor'],
+                Decor_col: ['ItemId', 'Brand', 'Description', 'Image'],
+                Musics: items['Music'],
+                Music_col: ['ItemId', 'Artist', 'Album', 'Genre', 'Length']
+            });
+        }, (error) =>{
+            console.log(error);
+            res.status(400);
+        }
+    )
+});
+
+router.post('/event/:id/item/add', function (req, res, next) {
+    let eventID = req.params.id;
+    db.add_event_item(eventID, req.body).then(
+        (result) => {
+            res.status(200);
+            res.redirect('/event/'+ eventID +'/item');
+        }, (error) =>{
+            console.log(error);
+            res.status(400);
+        }
+    )
+});
+
+
+
+
+
+
+
+
+
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

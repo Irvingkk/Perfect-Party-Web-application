@@ -4,6 +4,28 @@
   <p>Type: <input type="text" name="Type"></p>
   <p>Client: <input type="text" name="Client"></p>
   <p>Location: <input type="text" name="Location"></p>
-  <input type="submit" value="Submit">
-</form> 
+  <input type="submit" value="Search">
+
+  <table style="width:100%">
+    <tr>
+      <% columns.forEach((c)=>{ %>
+        <th><%= c %></th>
+      <% }) %>
+      <th>Action</th>
+    </tr>
+
+    <% rows.forEach((r)=>{ %>
+      <tr>
+        <% columns.forEach((c)=>{ %>
+          <td><%= r[c] %></td>
+        <% }) %>
+        <td>
+          <%- include(`${action}.ejs`, {row: r}) %>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+
+</form>
+
 <%- include _tail.ejs %>

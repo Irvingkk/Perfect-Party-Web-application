@@ -217,6 +217,8 @@ async function delete_event(id, req_body){
 }
 
 
+
+
 module.exports = {list_client, insert_client, select_event, insert_event, list_venue, query_client, modify_client, delete_client,
 query_event, modify_event, delete_event};
 

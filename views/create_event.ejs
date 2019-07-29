@@ -40,29 +40,6 @@
       <input style="float:right" type="button" value="Next" onclick="next_clicked()">
     </p>
   </div>
-
-  <div class="w3-container light-border" id="step3">
-    <h2>Custom your Event</h2>
-    <div class="w3-container light-border" id="menu" style="width:570px">
-      <h3>Menu Item</h3>
-      <p>Supplier</p>
-      <p>Type</p>
-    </div>
-    <div class="w3-container light-border" id="decor" style="width:570px">
-      <h3>Decor</h3>
-      <p>Supplier</p>
-      <p>Type</p>
-    </div>
-    <div class="w3-container light-border" id="musicOption" style="width:570px">
-      <h3>Music/Entertainment Options</h3>
-      <p>Supplier</p>
-      <p>Type</p>
-    </div>
-    <p style="width:570px">
-      <input type="button" value="Cancel" onclick="cancel_clicked()">
-      <input style="float:right" type="submit" value="Done">
-    </p>
-  </div>
 </form>
 
 <script>
@@ -88,21 +65,13 @@
       page2.style.display ="inherit";
       page3.style.display = "none";
       eventBookingStep ++;
-    } else if(eventBookingStep === 1){
-      console.log(2)
-      page1.style.display ="none";
-      page2.style.display ="none";
-      page3.style.display = "inherit";
-      eventBookingStep ++;
     } else{
       console.log(3)
     }
   }
 
 
-  if(isEdit){
-    document.querySelector("input[name='Subject']").value = events.subject;
-  }
+
 </script>
 <%- include _tail.ejs %>
 

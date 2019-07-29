@@ -1,0 +1,22 @@
+<%- include('_head.ejs', {title: 'Add Items'}) %>
+<div class="w3-container light-border">
+    <form method="get" action="add">
+        <p>Item Name: <input type="text" name="Name" placeholder="Enter item to search"></p>
+        <p>Price:</p>
+        <p>from <input type="number" name="PriceFrom">  to <input type="number" name="PriceTo"></p>
+
+        <p style="width:570px">
+            <input type="button" value="Cancel" onclick="cancel_clicked()">
+            <input style="float:right" type="submit" value="Search">
+        </p>
+    </form>
+    <script>
+        function cancel_clicked(){
+            location.href= "/search_event";
+        }
+    </script>
+</div>
+
+<%- include('table.ejs', {action: 'item_action'}) %>
+
+<%- include _tail.ejs %>
